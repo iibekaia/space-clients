@@ -1,0 +1,14 @@
+@mixin font-face($name, $file, $weight: normal, $style: normal) {
+  @font-face {
+    font-family: $name;
+    src: url('/assets/fonts/#{$file}.ttf') format('truetype');
+    font-weight: $weight;
+    font-style: $style;
+  }
+}
+
+$weights: (100, 200, 300, 400, 500, 600, 700, 800, 900);
+
+@each $weight in $weights {
+  @include font-face('Firago Latin', 'firago-latin-#{$weight}-normal', $weight, normal);
+}

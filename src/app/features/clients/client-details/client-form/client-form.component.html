@@ -1,0 +1,63 @@
+<p-card class="p-mb-3">
+  <form [formGroup]="form()" (ngSubmit)="onSubmit()" class="flex justify-center row">
+    <div class="d-flex flex-column p-field mb-2 col-md-6">
+      <label class="mb-1" for="clientNumber">კლიენტის ნომერი</label>
+      <input id="clientNumber" pInputText formControlName="clientNumber"/>
+      @if (form().get('clientNumber')?.invalid && form().get('clientNumber')?.touched) {
+        <small class="text-danger"> VALUE is required </small>
+      }
+    </div>
+    <div class="d-flex flex-column p-field mb-2 col-md-6">
+      <label class="mb-1" for="name">სახელი</label>
+      <input id="name" pInputText formControlName="name"/>
+      @if (form().get('name')?.invalid && form().get('name')?.touched) {
+        <small class="text-danger"> VALUE is required </small>
+      }
+    </div>
+    <div class="d-flex flex-column p-field mb-2 col-md-6">
+      <label class="mb-1" for="lastName">გვარი</label>
+      <input id="lastName" pInputText formControlName="lastName"/>
+      @if (form().get('lastName')?.invalid && form().get('lastName')?.touched) {
+        <small class="text-danger"> VALUE is required </small>
+      }
+    </div>
+    <div class="d-flex flex-column p-field mb-2 col-md-6">
+      <label class="mb-1" for="gender">სქესი</label>
+      <input id="gender" pInputText formControlName="gender"/>
+      @if (form().get('gender')?.invalid && form().get('gender')?.touched) {
+        <small class="text-danger"> VALUE is required </small>
+      }
+    </div>
+    <div class="d-flex flex-column p-field mb-2 col-md-6">
+      <label class="mb-1" for="identificationNumber">პირადი ნომერი</label>
+      <input id="identificationNumber" pInputText formControlName="identificationNumber"/>
+      @if (form().get('identificationNumber')?.invalid && form().get('identificationNumber')?.touched) {
+        <small class="text-danger"> VALUE is required </small>
+      }
+    </div>
+    <div class="d-flex flex-column p-field mb-2 col-md-6">
+      <label class="mb-1" for="mobile">მობილური</label>
+      <input id="mobile" pInputText formControlName="mobile"/>
+      @if (form().get('mobile')?.invalid && form().get('mobile')?.touched) {
+        <small class="text-danger"> VALUE is required </small>
+      }
+    </div>
+    <div class="d-flex flex-column p-field mb-2 col-md-6">
+      <label class="mb-1" for="legalAddress">იურიდიული მისამართი</label>
+      <input id="legalAddress" pInputText formControlName="legalAddress"/>
+      @if (form().get('legalAddress')?.invalid && form().get('legalAddress')?.touched) {
+        <small class="text-danger"> VALUE is required </small>
+      }
+    </div>
+    <div class="d-flex flex-column p-field mb-2 col-md-6">
+      <label class="mb-1" for="actualAddress">ფაქტობრივი მისამართი</label>
+      <input id="actualAddress" pInputText formControlName="actualAddress"/>
+      @if (form().get('actualAddress')?.invalid && form().get('actualAddress')?.touched) {
+        <small class="text-danger"> VALUE is required </small>
+      }
+    </div>
+
+    <!--    [disabled]="form().invalid"-->
+    <button pButton type="submit" label="Submit"></button>
+  </form>
+</p-card>
