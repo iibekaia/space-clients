@@ -24,7 +24,7 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.addUser({name: 'new imedaaa', email: 'imedaaa@gmail.com'}).subscribe();
+    // this.addUser({name: 'new imedaa', email: 'imedaaa@gmail.com'}).subscribe();
     setTimeout(() => {
       this.loadUsers();
     }, 100)
