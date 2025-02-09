@@ -1,4 +1,4 @@
-import {Component, computed, inject, signal, WritableSignal} from '@angular/core';
+import {Component, computed, inject, Signal, signal, WritableSignal} from '@angular/core';
 import {ReactiveFormsModule} from '@angular/forms';
 import {ClientFormComponent} from './client-form/client-form.component';
 import {ActivatedRoute} from '@angular/router';
@@ -15,9 +15,9 @@ import {IClient} from '../../../core/models/clients.model';
 })
 export class ClientDetailsComponent {
   private _route = inject(ActivatedRoute);
-  public client: WritableSignal<IClient> = signal(this._route.snapshot.data['client']);
-  public isEditMode  = computed(() => {
-    return this.client() !== undefined && !!this.client()[0].id
+  public clients: WritableSignal<IClient[]> = signal(this._route.snapshot.data['clients']);
+  public client: Signal<any>  = computed(() => {
+    return this.clients() !== undefined && this.clients()[0];
   });
 
   // this.addUser({name: 'new imedaa', email: 'imedaaa@gmail.com'}).subscribe();

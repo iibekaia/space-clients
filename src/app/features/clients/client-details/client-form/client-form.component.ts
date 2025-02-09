@@ -1,12 +1,24 @@
-import {Component, computed, inject, input, InputSignal, signal, WritableSignal} from '@angular/core';
+import {
+  Component,
+  computed,
+  DestroyRef,
+  effect,
+  inject,
+  input,
+  InputSignal,
+  signal,
+  WritableSignal
+} from '@angular/core';
 import {ButtonDirective} from 'primeng/button';
 import {Card} from 'primeng/card';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {InputText} from 'primeng/inputtext';
 import {NotificationService} from '../../../../core/services/notification.service';
-import {EGender, Genders} from '../../../../core/models/clients.model';
+import {EGender, Genders, IClient} from '../../../../core/models/clients.model';
 import {RadioButton} from 'primeng/radiobutton';
 import {Router} from '@angular/router';
+import {ClientsService} from '../../../../core/services/clients.service';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-client-form',
@@ -22,12 +34,14 @@ import {Router} from '@angular/router';
   styleUrl: './client-form.component.scss'
 })
 export class ClientFormComponent {
+  private _destroyRef = inject(DestroyRef);
+  private _clientsService = inject(ClientsService);
   private _fb = inject(FormBuilder);
   private _notifier = inject(NotificationService);
   private _router = inject(Router);
   public data: InputSignal<any> = input();
   public form: WritableSignal<FormGroup> = signal(this._fb.group({
-    clientNumber: ['', Validators.pattern(/^\d+$/)],
+    clientNumber: [ '', Validators.pattern(/^\d+$/)],
     name: ['', [
       Validators.required,
       Validators.minLength(2),
@@ -62,15 +76,54 @@ export class ClientFormComponent {
   }));
   public genders: WritableSignal<{ value: EGender, name: string }[]> = signal(Genders);
 
+  constructor() {
+    effect(() => {
+      this.updateForm(this.data());
+    });
+  }
+
   onSubmit() {
-    console.log("log => form value: ", this.form().getRawValue())
-    this.form().markAllAsTouched();
     if (this.form().invalid) {
+      this.form().markAllAsTouched();
       this._notifier.sayError('ფორმა შევსებულია ხარვეზით');
       return;
     }
+    if(this.data().id){
+      this.updateClient();
+    }else{
+      this.addClient();
+    }
   }
+
   goToBack(){
     this._router.navigate(['/']);
+  }
+
+  private addClient(){
+  }
+
+  private updateClient(){
+    console.log("log => form value: ", this.form().getRawValue())
+    const formValue = this.form().getRawValue();
+
+    this._clientsService.updateClient({...formValue, id: this.data().id})
+      .pipe(takeUntilDestroyed(this._destroyRef))
+      .subscribe(()=>{
+      this._notifier.saySuccess('განახლდა წარმატებით');
+      this.goToBack();
+    })
+
+  }
+  private updateForm(data: IClient){
+    if(data) {
+      this.form().get('clientNumber').setValue(data.clientNumber);
+      this.form().get('name').setValue(data.name);
+      this.form().get('personalNumber').setValue(data.personalNumber);
+      this.form().get('lastName').setValue(data.lastName);
+      this.form().get('gender').setValue(data.gender);
+      this.form().get('mobile').setValue(data.mobile);
+      this.form().get('legalAddress').setValue(data.legalAddress);
+      this.form().get('actualAddress').setValue(data.actualAddress);
+    }
   }
 }

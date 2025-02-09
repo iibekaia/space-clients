@@ -20,8 +20,12 @@ export class ClientsService {
      return this.http.get<IClient[]>(`${this._config.API_URL}/clients`)
   }
 
-  getClient(id: string) {
+  getClientById(id: string) {
     return this.http.get<IClient>(`${this._config.API_URL}/clients`, {params: {id}})
+  }
+
+  updateClient(params: IClient) {
+    return this.http.put<IClient>(`${this._config.API_URL}/clients/${params.id}`, params)
   }
 
   addClient(client: IClient) {}

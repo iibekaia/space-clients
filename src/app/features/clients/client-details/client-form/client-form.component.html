@@ -134,10 +134,9 @@
       </div>
     </div>
 
-    <!--    [disabled]="form().invalid"-->
     <div class="d-flex w-100 justify-content-end mt-3">
       <button pButton type="button" label="უკან" severity="secondary" class="ms-3" (click)="goToBack()"></button>
-      <button pButton type="submit" label="დამატება" class="ms-3"></button>
+      <button pButton type="submit" [label]="data().id ? 'რედაქტირება' : 'დამატება'" class="ms-3"></button>
     </div>
   </form>
 </p-card>

@@ -1,31 +1,12 @@
 {
   "clients": [
     {
-      "id": 1,
-    "clientNumber": 123213,
-    "name": "imeda",
-    "lastName": "bekaia",
-    "gender": 1,
-    "personalNumber": "16991955252",
-    "mobile": "567430712",
-    "legalAddress": {
-      "country": "Georgia",
-      "city": "Tbilisi",
-      "address": "Mariam dadiani-anchabadzd"
-    },
-    "actualAddress": {
-      "country": "Georgia",
-      "city": "Tbilisi",
-      "address": "Mariam dadiani-anchabadzd"
-    }
-  },
-    {
-      "id": 2,
-      "clientNumber": 99787,
+      "id": "1",
+      "clientNumber": 123213,
       "name": "imeda",
       "lastName": "bekaia",
       "gender": 1,
-      "personalNumber": "34991955252",
+      "personalNumber": "16991955252",
       "mobile": "567430712",
       "legalAddress": {
         "country": "Georgia",
@@ -39,7 +20,26 @@
       }
     },
     {
-      "id": 3,
+      "clientNumber": 99787,
+      "name": "nargizi",
+      "lastName": "khaiiiiiiin",
+      "gender": 1,
+      "personalNumber": "34991955252",
+      "mobile": "567430712",
+      "legalAddress": {
+        "country": "Georgia",
+        "city": "Tbilisi",
+        "address": "Mariam dadiani-anchabadzd"
+      },
+      "actualAddress": {
+        "country": "Georgia",
+        "city": "Tbilisi",
+        "address": "aaaa"
+      },
+      "id": "2"
+    },
+    {
+      "id": "3",
       "clientNumber": 222222,
       "name": "zurab",
       "lastName": "bekaia",
@@ -56,5 +56,6 @@
         "city": "Tbilisi",
         "address": "Mariam dadiani-anchabadzd"
       }
-    }]
+    }
+  ]
 }

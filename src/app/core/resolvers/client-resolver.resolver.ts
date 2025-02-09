@@ -9,5 +9,5 @@ export const clientResolverResolver: ResolveFn<any> = (route, state) => {
   if (!id) {
     throw new Error('Client ID is missing in route parameters');
   }
-  return clientService.getClient(id);
+  return clientService.getClientById(id);
 };

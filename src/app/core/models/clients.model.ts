@@ -1,12 +1,21 @@
 export interface IClient {
   id: any;
+  clientNumber: string;
   name: number;
   lastName: string;
-  gender: string;
+  gender: number;
   personalNumber: string;
   mobile: string;
-  legalAddress: string;
-  actualAddress: string;
+  legalAddress: {
+    "country": string,
+    "city": string,
+    "address": string
+  };
+  actualAddress:  {
+    "country": string,
+    "city": string,
+    "address": string
+  };
 }
 
 export enum EGender {

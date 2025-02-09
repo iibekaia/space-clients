@@ -1,10 +1,11 @@
-import {Component, inject, signal, WritableSignal} from '@angular/core';
+import {Component, DestroyRef, inject, signal, WritableSignal} from '@angular/core';
 import {TableModule} from 'primeng/table';
 import {Button, ButtonDirective} from 'primeng/button';
 import {Router} from '@angular/router';
 import {ClientsService} from '../../../core/services/clients.service';
 import {IClient} from '../../../core/models/clients.model';
 import {Card} from 'primeng/card';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-client-list',
@@ -19,6 +20,7 @@ import {Card} from 'primeng/card';
 })
 export class ClientListComponent {
   private _router = inject(Router);
+  private _destroyRef = inject(DestroyRef);
   private _clientsService = inject(ClientsService);
   public clients: WritableSignal<any[]> = signal([]);
   public columns: WritableSignal<{value: string; title: string}[]> = signal([
@@ -33,6 +35,7 @@ export class ClientListComponent {
 
   constructor() {
     this._clientsService.getClients()
+      .pipe(takeUntilDestroyed(this._destroyRef))
       .subscribe((clients: IClient[])=>{
         this.clients.set(clients)
       })
