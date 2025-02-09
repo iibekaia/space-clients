@@ -1,48 +1,46 @@
-import {Component} from '@angular/core';
+import {Component, inject, signal, WritableSignal} from '@angular/core';
 import {TableModule} from 'primeng/table';
-import {Button} from 'primeng/button';
+import {Button, ButtonDirective} from 'primeng/button';
 import {Router} from '@angular/router';
+import {ClientsService} from '../../../core/services/clients.service';
+import {IClient} from '../../../core/models/clients.model';
+import {Card} from 'primeng/card';
 
 @Component({
   selector: 'app-client-list',
   imports: [
     TableModule,
     Button,
+    Card,
+    ButtonDirective,
   ],
   templateUrl: './client-list.component.html',
   styleUrl: './client-list.component.scss'
 })
 export class ClientListComponent {
-  public clients: any[] = [{
-    id: '1000',
-    code: 'f230fh0g3',
-    name: 'Bamboo Watch',
-    description: 'Product Description',
-    image: 'bamboo-watch.jpg',
-    price: 65,
-    category: 'Accessories',
-    quantity: 24,
-    inventoryStatus: 'INSTOCK',
-    rating: 5
-  },
-    {
-      id: '54',
-      code: 'f230fh0g3',
-      name: 'Bamboo Watch',
-      description: 'Product Description',
-      image: 'bamboo-watch.jpg',
-      price: 54,
-      category: 'Accessories',
-      quantity: 12,
-      inventoryStatus: 'INSTOCK',
-      rating: 5
-    }];
+  private _router = inject(Router);
+  private _clientsService = inject(ClientsService);
+  public loading = signal<boolean>(false);
+  public error = signal<string | null>(null);
+  public clients: WritableSignal<any[]> = signal([]);
+  public columns: WritableSignal<{value: string; title: string}[]> = signal([
+    {value: 'clientNumber', title: 'კლიენტის N'},
+    {value: 'name', title: 'სახელი'},
+    {value: 'lastName', title: 'გვარი'},
+    {value: 'personalNumber', title: 'პ/ნ'},
+    {value: 'gender', title: 'სქესი'},
+    {value: 'mobile', title: 'ტელ:'},
+    {value: '_actions', title: 'ქმედება'}
+  ])
 
-  constructor(private _router: Router) {
+  constructor() {
+    this._clientsService.getClients()
+      .subscribe((clients: IClient[])=>{
+        this.clients.set(clients)
+      })
   }
 
   onAddClient() {
     this._router.navigate(['add'])
   }
-
 }

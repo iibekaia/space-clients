@@ -2,7 +2,7 @@ export interface IClient {
   name: number;
   lastName: string;
   gender: string;
-  identificationNumber: string;
+  personalNumber: string;
   mobile: string;
   legalAddress: string;
   actualAddress: string;
@@ -17,3 +17,7 @@ export const Genders = [
   {value: EGender.MALE, name: 'კაცი'},
   {value: EGender.FEMALE, name: 'ქალი'},
 ]
+
+export interface AppConfig {
+  API_URL: string;
+}

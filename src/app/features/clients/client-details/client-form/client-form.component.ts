@@ -1,11 +1,12 @@
-import {Component, signal, WritableSignal} from '@angular/core';
+import {Component, inject, signal, WritableSignal} from '@angular/core';
 import {ButtonDirective} from 'primeng/button';
 import {Card} from 'primeng/card';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {InputText} from 'primeng/inputtext';
 import {NotificationService} from '../../../../core/services/notification.service';
-import {EGender, Genders} from '../../../../core/models/IClient';
+import {EGender, Genders} from '../../../../core/models/clients.model';
 import {RadioButton} from 'primeng/radiobutton';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-client-form',
@@ -21,15 +22,45 @@ import {RadioButton} from 'primeng/radiobutton';
   styleUrl: './client-form.component.scss'
 })
 export class ClientFormComponent {
-  public form: WritableSignal<FormGroup> = signal(undefined);
-  public genders: WritableSignal<{ value: EGender, name: string }[]> = signal(Genders);
+  private _fb = inject(FormBuilder);
+  private _notifier = inject(NotificationService);
+  private _router = inject(Router);
 
-  constructor(
-    private fb: FormBuilder,
-    private _notifier: NotificationService
-  ) {
-    this.createForm();
-  }
+  public form: WritableSignal<FormGroup> = signal(this._fb.group({
+    clientNumber: ['', Validators.pattern(/^\d+$/)],
+    name: ['', [
+      Validators.required,
+      Validators.minLength(2),
+      Validators.maxLength(50),
+      Validators.pattern(/^(?!.*[ა-ჰ].*[a-zA-Z])(?!.*[a-zA-Z].*[ა-ჰ])([ა-ჰ]+|[a-zA-Z]+)$/)
+    ]],
+    lastName: ['', [
+      Validators.required,
+      Validators.minLength(2),
+      Validators.maxLength(50),
+      Validators.pattern(/^(?!.*[ა-ჰ].*[a-zA-Z])(?!.*[a-zA-Z].*[ა-ჰ])([ა-ჰ]+|[a-zA-Z]+)$/)
+    ]],
+    gender: ['', Validators.required],
+    personalNumber: ['', [
+      Validators.required,
+      Validators.pattern(/^\d{11}$/)
+    ]],
+    mobile: ['', [
+      Validators.required,
+      Validators.pattern(/^5\d{8}$/)
+    ]],
+    legalAddress: this._fb.group({
+      country: ['', Validators.required],
+      city: ['', Validators.required],
+      address: ['', Validators.required]
+    }),
+    actualAddress:  this._fb.group({
+      country: ['', Validators.required],
+      city: ['', Validators.required],
+      address: ['', Validators.required]
+    }),
+  }));
+  public genders: WritableSignal<{ value: EGender, name: string }[]> = signal(Genders);
 
   onSubmit() {
     console.log("log => form value: ", this.form().getRawValue())
@@ -39,22 +70,7 @@ export class ClientFormComponent {
       return;
     }
   }
-
-  private createForm() {
-    this.form.set(this.fb.group({
-      clientNumber: ['', Validators.pattern(/^\d+$/)],
-      name: ['', [
-        Validators.required,
-        Validators.minLength(2),
-        Validators.maxLength(50),
-        Validators.pattern(/^(?!.*[ა-ჰ].*[a-zA-Z])(?!.*[a-zA-Z].*[ა-ჰ])([ა-ჰ]+|[a-zA-Z]+)$/)
-      ]],
-      lastName: ['', Validators.required],
-      gender: ['', Validators.required],
-      identificationNumber: ['', Validators.required],
-      mobile: ['', Validators.required],
-      legalAddress: ['', Validators.required],
-      actualAddress: ['', Validators.required],
-    }));
+  goToBack(){
+    this._router.navigate(['/']);
   }
 }

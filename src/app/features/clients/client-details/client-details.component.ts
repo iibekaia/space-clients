@@ -12,4 +12,5 @@ import {ClientFormComponent} from './client-form/client-form.component';
   styleUrl: './client-details.component.scss'
 })
 export class ClientDetailsComponent {
+  // this.addUser({name: 'new imedaa', email: 'imedaaa@gmail.com'}).subscribe();
 }

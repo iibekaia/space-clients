@@ -1,4 +1,4 @@
-import {ApplicationConfig, importProvidersFrom, provideZoneChangeDetection} from '@angular/core';
+import {ApplicationConfig, importProvidersFrom, InjectionToken, provideZoneChangeDetection} from '@angular/core';
 import {provideRouter} from '@angular/router';
 import {provideAnimationsAsync} from '@angular/platform-browser/animations/async';
 import {providePrimeNG} from 'primeng/config';
@@ -9,7 +9,9 @@ import {provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
 import {ButtonModule} from 'primeng/button';
 import {provideToastr, ToastrModule} from 'ngx-toastr';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {AppConfig} from './core/models/clients.model';
 
+export const CONFIG = new InjectionToken<AppConfig>('CONFIG');
 export const appConfig: ApplicationConfig = {
   providers: [
     importProvidersFrom([
@@ -34,8 +36,8 @@ export const appConfig: ApplicationConfig = {
       }
     }),
     {
-      provide: 'CONFIG',
-      useValue: {API_URL},
+      provide: CONFIG,
+      useValue: {API_URL}
     },
   ]
 };
