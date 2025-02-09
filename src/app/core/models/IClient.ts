@@ -14,6 +14,6 @@ export enum EGender {
 }
 
 export const Genders = [
-  {[EGender.MALE]: "კაცი"},
-  {[EGender.FEMALE]: "ქალი"}
+  {value: EGender.MALE, name: 'კაცი'},
+  {value: EGender.FEMALE, name: 'ქალი'},
 ]
