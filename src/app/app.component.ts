@@ -31,10 +31,10 @@ export class AppComponent implements OnInit {
   }
 
   loadUsers() {
-    this.http.get<any>(`${this.CONFIG.API_URL}/users`).subscribe()
+    this.http.get<any>(`${this.CONFIG.API_URL}/clients`).subscribe()
   }
 
   addUser(user: { name: string; email: string }): Observable<any> {
-    return this.http.post(`${this.CONFIG.API_URL}/users`, user);
+    return this.http.post(`${this.CONFIG.API_URL}/clients`, user);
   }
 }
