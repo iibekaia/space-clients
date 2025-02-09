@@ -2,6 +2,7 @@ import {inject, Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {IClient} from '../models/clients.model';
 import {CONFIG} from '../../app.config';
+import {map} from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -16,8 +17,13 @@ export class ClientsService {
     }
   }
 
-  getClients() {
-     return this.http.get<IClient[]>(`${this._config.API_URL}/clients`)
+  getClients(params: any) {
+    return this.http.get<IClient[]>(`${this._config.API_URL}/clients`, {params, observe: 'response'}).pipe(
+      map(response => {
+        const count = Number(response.headers.get('X-Total-Count')) || 0;
+        return {data: response.body || [], count};
+      })
+    );
   }
 
   getClientById(id: string) {
@@ -28,5 +34,7 @@ export class ClientsService {
     return this.http.put<IClient>(`${this._config.API_URL}/clients/${params.id}`, params)
   }
 
-  addClient(client: IClient) {}
+  addClient(params: IClient) {
+    return this.http.post<IClient>(`${this._config.API_URL}/clients`, params)
+  }
 }

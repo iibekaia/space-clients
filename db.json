@@ -56,6 +56,25 @@
         "city": "Tbilisi",
         "address": "Mariam dadiani-anchabadzd"
       }
+    },
+    {
+      "clientNumber": "789456",
+      "name": "ლუკა",
+      "lastName": "შონია",
+      "gender": 1,
+      "personalNumber": "37554155952",
+      "mobile": "541414141",
+      "legalAddress": {
+        "country": "ხეორხია",
+        "city": "კულაში",
+        "address": "აღამაშენებლსი ხეივანი, ხის ძირას"
+      },
+      "actualAddress": {
+        "country": "გურჩუსტან",
+        "city": "სამტრედია",
+        "address": "დაღმამშენებლის უმისამართ #3"
+      },
+      "id": "I8S0xIk"
     }
   ]
 }

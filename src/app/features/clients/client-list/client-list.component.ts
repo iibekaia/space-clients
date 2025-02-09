@@ -1,11 +1,12 @@
-import {Component, DestroyRef, inject, signal, WritableSignal} from '@angular/core';
+import {Component, DestroyRef, inject, Signal, signal, WritableSignal} from '@angular/core';
 import {TableModule} from 'primeng/table';
 import {Button, ButtonDirective} from 'primeng/button';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {ClientsService} from '../../../core/services/clients.service';
 import {IClient} from '../../../core/models/clients.model';
 import {Card} from 'primeng/card';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import {Paginator} from 'primeng/paginator';
 
 @Component({
   selector: 'app-client-list',
@@ -14,16 +15,20 @@ import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
     Button,
     Card,
     ButtonDirective,
+    Paginator,
   ],
   templateUrl: './client-list.component.html',
   styleUrl: './client-list.component.scss'
 })
 export class ClientListComponent {
+  private _route = inject(ActivatedRoute);
   private _router = inject(Router);
   private _destroyRef = inject(DestroyRef);
   private _clientsService = inject(ClientsService);
+  private _snapshot: Signal<{ _page: any, _limit: any } | any> = signal(this._route.snapshot.queryParams)
   public clients: WritableSignal<any[]> = signal([]);
-  public columns: WritableSignal<{value: string; title: string}[]> = signal([
+  public total: WritableSignal<number> = signal(0);
+  public columns: WritableSignal<{ value: string; title: string }[]> = signal([
     {value: 'clientNumber', title: 'კლიენტის N'},
     {value: 'name', title: 'სახელი'},
     {value: 'lastName', title: 'გვარი'},
@@ -32,20 +37,45 @@ export class ClientListComponent {
     {value: 'mobile', title: 'ტელ:'},
     {value: '_actions', title: 'ქმედება'}
   ])
+  public _page: WritableSignal<number> = signal(this._snapshot()?._page || 0);
+  public _limit: WritableSignal<number> = signal(this._snapshot()?._limit || 10);
 
   constructor() {
-    this._clientsService.getClients()
-      .pipe(takeUntilDestroyed(this._destroyRef))
-      .subscribe((clients: IClient[])=>{
-        this.clients.set(clients)
-      })
+    this.getClients();
   }
 
   onAdd() {
-    this._router.navigate(['add'])
+    this._router.navigate(['dashboard', 'add'])
   }
 
   onEdit(id: string) {
-    this._router.navigate(['edit', id])
+    this._router.navigate(['dashboard', 'edit', id])
+  }
+
+  onPageChange(event: any) {
+    let queryParams: any = {};
+    if (event.first !== this._page()) {
+      this._page.set(event.first);
+      queryParams = {...queryParams, _page: this._page()}
+    }
+    if (event.rows !== this._page()) {
+      this._limit.set(event.rows);
+      queryParams = {...queryParams, _limit: this._limit()}
+    }
+    this._router.navigate([], {
+      relativeTo: this._route,
+      queryParams: queryParams,
+      queryParamsHandling: 'merge',
+    });
+    this.getClients();
+  }
+
+  private getClients() {
+    this._clientsService.getClients({_page: this._page(), _limit: this._limit()})
+      .pipe(takeUntilDestroyed(this._destroyRef))
+      .subscribe((response: { data: IClient[], count: number }) => {
+        this.clients.set(response.data);
+        this.total.set(response.count);
+      })
   }
 }

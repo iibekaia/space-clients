@@ -41,7 +41,7 @@ export class ClientFormComponent {
   private _router = inject(Router);
   public data: InputSignal<any> = input();
   public form: WritableSignal<FormGroup> = signal(this._fb.group({
-    clientNumber: [ '', Validators.pattern(/^\d+$/)],
+    clientNumber: ['', Validators.pattern(/^\d+$/)],
     name: ['', [
       Validators.required,
       Validators.minLength(2),
@@ -68,7 +68,7 @@ export class ClientFormComponent {
       city: ['', Validators.required],
       address: ['', Validators.required]
     }),
-    actualAddress:  this._fb.group({
+    actualAddress: this._fb.group({
       country: ['', Validators.required],
       city: ['', Validators.required],
       address: ['', Validators.required]
@@ -88,34 +88,40 @@ export class ClientFormComponent {
       this._notifier.sayError('ფორმა შევსებულია ხარვეზით');
       return;
     }
-    if(this.data().id){
+    if (this.data().id) {
       this.updateClient();
-    }else{
+    } else {
       this.addClient();
     }
   }
 
-  goToBack(){
+  goToBack() {
     this._router.navigate(['/']);
   }
 
-  private addClient(){
+  private addClient() {
+    const formValue = this.form().getRawValue();
+    this._clientsService.addClient(formValue)
+      .pipe(takeUntilDestroyed(this._destroyRef))
+      .subscribe(() => {
+        this._notifier.saySuccess('დაემატა წარმატებით');
+        this.goToBack();
+      })
   }
 
-  private updateClient(){
-    console.log("log => form value: ", this.form().getRawValue())
+  private updateClient() {
     const formValue = this.form().getRawValue();
 
     this._clientsService.updateClient({...formValue, id: this.data().id})
       .pipe(takeUntilDestroyed(this._destroyRef))
-      .subscribe(()=>{
-      this._notifier.saySuccess('განახლდა წარმატებით');
-      this.goToBack();
-    })
-
+      .subscribe(() => {
+        this._notifier.saySuccess('განახლდა წარმატებით');
+        this.goToBack();
+      })
   }
-  private updateForm(data: IClient){
-    if(data) {
+
+  private updateForm(data: IClient) {
+    if (data) {
       this.form().get('clientNumber').setValue(data.clientNumber);
       this.form().get('name').setValue(data.name);
       this.form().get('personalNumber').setValue(data.personalNumber);

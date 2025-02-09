@@ -7,12 +7,12 @@
       <ng-template #header>
         <tr>
           @for (col of columns(); track col.value) {
-            @if(col.value !== '_actions'){
-              <th pSortableColumn="{{col.value}}" style="width:20%" > {{col.title}}
+            @if (col.value !== '_actions') {
+              <th pSortableColumn="{{col.value}}" style="width:20%"> {{ col.title }}
                 <p-sortIcon field="{{col.value}}"/>
               </th>
-            } @else{
-              <th style="width:20%" > {{col.title}} </th>
+            } @else {
+              <th style="width:20%"> {{ col.title }}</th>
             }
           }
         </tr>
@@ -21,8 +21,8 @@
         <tr>
           @for (col of columns(); track col.value) {
             <td>
-              @if(col.value !== '_actions'){
-                {{client[col.value]}}
+              @if (col.value !== '_actions') {
+                {{ client[col.value] }}
               } @else {
                 <button
                   pButton
@@ -37,5 +37,11 @@
         </tr>
       </ng-template>
     </p-table>
+    <p-paginator
+      [first]="_page()" [rows]="_limit()"
+      [totalRecords]="total()"
+      [rowsPerPageOptions]="[2, 5, 10]"
+      (onPageChange)="onPageChange($event)"
+    />
   </p-card>
 </div>
