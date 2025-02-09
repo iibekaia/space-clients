@@ -1,6 +1,6 @@
 <div class="p-3">
   <div class="mb-3">
-    <p-button label="დამატება" icon="pi pi-plus" severity="success" (onClick)="onAddClient()"/>
+    <p-button label="დამატება" icon="pi pi-plus" severity="success" (onClick)="onAdd()"/>
   </div>
   <p-card>
     <p-table [value]="clients()" [tableStyle]="{'min-width': '60rem'}">
@@ -24,7 +24,13 @@
               @if(col.value !== '_actions'){
                 {{client[col.value]}}
               } @else {
-                <button pButton type="button" label="რედაქტირება" severity="secondary"></button>
+                <button
+                  pButton
+                  type="button"
+                  label="რედაქტირება"
+                  severity="secondary"
+                  (click)="onEdit(client.id)"
+                ></button>
               }
             </td>
           }

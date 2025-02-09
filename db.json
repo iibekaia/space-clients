@@ -1,6 +1,7 @@
 {
   "clients": [
     {
+      "id": 1,
     "clientNumber": 123213,
     "name": "imeda",
     "lastName": "bekaia",
@@ -19,6 +20,7 @@
     }
   },
     {
+      "id": 2,
       "clientNumber": 99787,
       "name": "imeda",
       "lastName": "bekaia",
@@ -37,6 +39,7 @@
       }
     },
     {
+      "id": 3,
       "clientNumber": 222222,
       "name": "zurab",
       "lastName": "bekaia",

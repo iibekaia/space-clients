@@ -20,8 +20,6 @@ import {Card} from 'primeng/card';
 export class ClientListComponent {
   private _router = inject(Router);
   private _clientsService = inject(ClientsService);
-  public loading = signal<boolean>(false);
-  public error = signal<string | null>(null);
   public clients: WritableSignal<any[]> = signal([]);
   public columns: WritableSignal<{value: string; title: string}[]> = signal([
     {value: 'clientNumber', title: 'კლიენტის N'},
@@ -40,7 +38,11 @@ export class ClientListComponent {
       })
   }
 
-  onAddClient() {
+  onAdd() {
     this._router.navigate(['add'])
+  }
+
+  onEdit(id: string) {
+    this._router.navigate(['edit', id])
   }
 }
