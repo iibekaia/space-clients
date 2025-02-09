@@ -7,17 +7,27 @@ import {routes} from './app.routes';
 import {API_URL} from '../config/config';
 import {provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
 import {ButtonModule} from 'primeng/button';
+import {provideToastr, ToastrModule} from 'ngx-toastr';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     importProvidersFrom([
-      ButtonModule
+      ButtonModule,
+      BrowserAnimationsModule,
+      ToastrModule.forRoot(),
     ]),
     provideZoneChangeDetection({eventCoalescing: true}),
     provideRouter(routes),
     provideAnimationsAsync(),
     // provideHttpClient(withInterceptors([clientInterceptorInterceptor])),
     provideHttpClient(withInterceptorsFromDi()),
+    provideToastr({
+      timeOut: 3000,
+      positionClass: 'toast-bottom-left',
+      preventDuplicates: false,
+      closeButton: true
+    }),
     providePrimeNG({
       theme: {
         preset: Aura

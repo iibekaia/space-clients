@@ -3,6 +3,7 @@ import {ButtonDirective} from 'primeng/button';
 import {Card} from 'primeng/card';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {InputText} from 'primeng/inputtext';
+import {NotificationService} from '../../../../core/services/notification.service';
 
 @Component({
   selector: 'app-client-form',
@@ -19,13 +20,17 @@ import {InputText} from 'primeng/inputtext';
 export class ClientFormComponent {
   public form: WritableSignal<FormGroup> = signal(undefined);
 
-  constructor(private fb: FormBuilder) {
+  constructor(
+    private fb: FormBuilder,
+    private _notifier: NotificationService
+  ) {
     this.createForm();
   }
 
   onSubmit() {
     this.form().markAllAsTouched();
     if (this.form().invalid) {
+      this._notifier.sayError('ფორმა შევსებულია ხარვეზით');
       return;
     }
   }

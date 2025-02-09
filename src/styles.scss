@@ -1,5 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
 @use 'assets/styles/font';
+@use 'assets/styles/ngx-toastr-override';
 
 * {
   font-family: 'Firago Latin', sans-serif;
