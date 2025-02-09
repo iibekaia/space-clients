@@ -1,4 +1,4 @@
-import {Component, inject, signal, WritableSignal} from '@angular/core';
+import {Component, computed, inject, input, InputSignal, signal, WritableSignal} from '@angular/core';
 import {ButtonDirective} from 'primeng/button';
 import {Card} from 'primeng/card';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
@@ -25,7 +25,7 @@ export class ClientFormComponent {
   private _fb = inject(FormBuilder);
   private _notifier = inject(NotificationService);
   private _router = inject(Router);
-
+  public data: InputSignal<any> = input();
   public form: WritableSignal<FormGroup> = signal(this._fb.group({
     clientNumber: ['', Validators.pattern(/^\d+$/)],
     name: ['', [

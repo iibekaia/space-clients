@@ -12,3 +12,31 @@ $weights: (100, 200, 300, 400, 500, 600, 700, 800, 900);
 @each $weight in $weights {
   @include font-face('Firago Latin', 'firago-latin-#{$weight}-normal', $weight, normal);
 }
+
+
+
+$font-sizes: (
+  10: 10px,
+  11: 11px,
+  12: 12px,
+  13: 13px,
+  14: 14px,
+  15: 15px,
+  16: 16px,
+  17: 17px,
+  18: 18px,
+  20: 20px,
+  22: 22px,
+  24: 24px,
+  26: 26px,
+  28: 28px,
+  30: 30px,
+  38: 38px,
+  40: 40px,
+);
+
+@each $size, $value in $font-sizes {
+  .font-size-#{$size} {
+    font-size: $value;
+  }
+}

@@ -20,5 +20,9 @@ export class ClientsService {
      return this.http.get<IClient[]>(`${this._config.API_URL}/clients`)
   }
 
+  getClient(id: string) {
+    return this.http.get<IClient>(`${this._config.API_URL}/clients`, {params: {id}})
+  }
+
   addClient(client: IClient) {}
 }

@@ -1,4 +1,5 @@
 import {Routes} from '@angular/router';
+import {clientResolverResolver} from './core/resolvers/client-resolver.resolver';
 
 export const routes: Routes = [
   {
@@ -15,6 +16,7 @@ export const routes: Routes = [
       },
       {
         path: 'edit/:id',
+        resolve: { client: clientResolverResolver },
         loadComponent: () => import('./features/clients/client-details/client-details.component').then(m => m.ClientDetailsComponent),
       },
     ]
