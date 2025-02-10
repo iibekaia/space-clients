@@ -109,7 +109,7 @@ export class ClientFormComponent {
 
   private addClient() {
     const formValue = this.form().getRawValue();
-    this._clientsService.addClient(formValue)
+    this._clientsService.addClient({...formValue, active: true})
       .pipe(takeUntilDestroyed(this._destroyRef))
       .subscribe(() => {
         this._notifier.saySuccess('დაემატა წარმატებით');

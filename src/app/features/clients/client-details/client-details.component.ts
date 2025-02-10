@@ -6,21 +6,19 @@ import {IClient} from '../../../core/models/clients.model';
 import {Card} from 'primeng/card';
 
 @Component({
-    selector: 'app-client-details',
+  selector: 'app-client-details',
   imports: [
     ReactiveFormsModule,
     ClientFormComponent,
     Card,
   ],
-    templateUrl: './client-details.component.html',
-    styleUrl: './client-details.component.scss'
+  templateUrl: './client-details.component.html',
+  styleUrl: './client-details.component.scss'
 })
 export class ClientDetailsComponent {
-    private _route = inject(ActivatedRoute);
-    public clients: WritableSignal<IClient[]> = signal(this._route.snapshot.data['clients']);
-    public client: Signal<any> = computed(() => {
-        return this.clients() !== undefined && this.clients()[0];
-    });
-
-    // this.addUser({name: 'new imedaa', email: 'imedaaa@gmail.com'}).subscribe();
+  private _route = inject(ActivatedRoute);
+  public clients: WritableSignal<IClient[]> = signal(this._route.snapshot.data['clients']);
+  public client: Signal<any> = computed(() => {
+    return this.clients() !== undefined && this.clients()[0];
+  });
 }
