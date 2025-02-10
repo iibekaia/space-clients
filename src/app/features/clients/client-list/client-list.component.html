@@ -1,9 +1,20 @@
 <div class="p-3">
   <div class="mb-3">
-    <p-button label="დამატება" icon="pi pi-plus" severity="success" (onClick)="onAdd()"/>
+    <p-button label="დამატება" icon="pi pi-plus" severity="success" (onClick)="onAdd()" class="me-2"/>
+    @if (hasFilter()) {
+      <p-button label="ფილტრის გასუფთავება" icon="pi pi-times" severity="help" (onClick)="onSort(null); table.reset()" class="me-2"/>
+    }
   </div>
+
   <p-card>
-    <p-table [value]="clients()" [tableStyle]="{'min-width': '60rem'}">
+    <p-table
+      #table
+      [value]="clients()"
+      (onSort)="onSort($event)"
+      [tableStyle]="{'min-width': '60rem'}"
+      [sortField]="sortField()"
+      [sortOrder]="sortOrder()"
+    >
       <ng-template #header>
         <tr>
           @for (col of columns(); track col.value) {

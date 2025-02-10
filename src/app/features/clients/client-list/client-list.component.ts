@@ -1,6 +1,6 @@
-import {Component, DestroyRef, inject, Signal, signal, WritableSignal} from '@angular/core';
+import {Component, DestroyRef, inject, signal, WritableSignal} from '@angular/core';
 import {TableModule} from 'primeng/table';
-import {Button, ButtonDirective} from 'primeng/button';
+import {Button} from 'primeng/button';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ClientsService} from '../../../core/services/clients.service';
 import {IClient} from '../../../core/models/clients.model';
@@ -15,7 +15,6 @@ import {NotificationService} from '../../../core/services/notification.service';
     TableModule,
     Button,
     Card,
-    ButtonDirective,
     Paginator,
   ],
   templateUrl: './client-list.component.html',
@@ -27,7 +26,12 @@ export class ClientListComponent {
   private _router = inject(Router);
   private _destroyRef = inject(DestroyRef);
   private _clientsService = inject(ClientsService);
-  private _snapshot: Signal<{ _page: any, _limit: any } | any> = signal(this._route.snapshot.queryParams)
+  private _snapshot: WritableSignal<{
+    _page: any,
+    _limit: any,
+    field: string,
+    order: number
+  } | any> = signal(this.generateSnapShot);
   public clients: WritableSignal<any[]> = signal([]);
   public total: WritableSignal<number> = signal(0);
   public columns: WritableSignal<{ value: string; title: string }[]> = signal([
@@ -41,9 +45,26 @@ export class ClientListComponent {
   ])
   public _page: WritableSignal<number> = signal(this._snapshot()?._page || 0);
   public _limit: WritableSignal<number> = signal(this._snapshot()?._limit || 10);
+  public sortField: WritableSignal<string> = signal(this._snapshot()?.field || undefined)
+  public sortOrder: WritableSignal<number> = signal(+this._snapshot()?.order || undefined)
+  public hasFilter: WritableSignal<boolean> = signal(false);
 
   constructor() {
     this.getClients();
+  }
+
+  onSort(event: { field: string, order: number }) {
+    const hasSort = event !== null;
+    this.sortField.set(hasSort ? event.field : undefined);
+    this.sortOrder.set(hasSort ? event.order : undefined);
+    this._router.navigate([], {
+      relativeTo: this._route,
+      queryParams: !hasSort ? {} : {field: this.sortField(), order: this.sortOrder()},
+      queryParamsHandling: !hasSort ? 'replace' : 'merge',
+    }).then(() => {
+      this._snapshot.set(this.generateSnapShot);
+      this.hasFilter.set(Object.values(this._snapshot()).length !== 0);
+    })
   }
 
   onAdd() {
@@ -79,6 +100,10 @@ export class ClientListComponent {
       queryParamsHandling: 'merge',
     });
     this.getClients();
+  }
+
+  get generateSnapShot() {
+    return this._route.snapshot.queryParams;
   }
 
   private getClients() {
