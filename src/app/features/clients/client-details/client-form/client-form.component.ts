@@ -1,6 +1,5 @@
 import {
   Component,
-  computed,
   DestroyRef,
   effect,
   inject,
@@ -9,7 +8,7 @@ import {
   signal,
   WritableSignal
 } from '@angular/core';
-import {Button, ButtonDirective} from 'primeng/button';
+import {Button} from 'primeng/button';
 import {Card} from 'primeng/card';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {InputText} from 'primeng/inputtext';
@@ -23,7 +22,6 @@ import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 @Component({
   selector: 'app-client-form',
   imports: [
-    ButtonDirective,
     Card,
     FormsModule,
     InputText,

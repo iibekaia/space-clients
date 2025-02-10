@@ -57,13 +57,14 @@ export class ClientListComponent {
     const hasSort = event !== null;
     this.sortField.set(hasSort ? event.field : undefined);
     this.sortOrder.set(hasSort ? event.order : undefined);
+    const {field, order, ...rest} = this.generateSnapShot;
     this._router.navigate([], {
       relativeTo: this._route,
-      queryParams: !hasSort ? {} : {field: this.sortField(), order: this.sortOrder()},
+      queryParams: !hasSort ? {...rest} : {field: this.sortField(), order: this.sortOrder()},
       queryParamsHandling: !hasSort ? 'replace' : 'merge',
     }).then(() => {
       this._snapshot.set(this.generateSnapShot);
-      this.hasFilter.set(Object.values(this._snapshot()).length !== 0);
+      this.hasFilter.set(this._snapshot()?.field || this._snapshot()?.order);
     })
   }
 
