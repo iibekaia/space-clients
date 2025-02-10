@@ -1,5 +1,6 @@
 export interface IClient {
   id: any;
+  active: boolean;
   clientNumber: string;
   name: number;
   lastName: string;
@@ -7,14 +8,14 @@ export interface IClient {
   personalNumber: string;
   mobile: string;
   legalAddress: {
-    "country": string,
-    "city": string,
-    "address": string
+    country: string,
+    city: string,
+    address: string
   };
-  actualAddress:  {
-    "country": string,
-    "city": string,
-    "address": string
+  actualAddress: {
+    country: string,
+    city: string,
+    address: string
   };
 }
 

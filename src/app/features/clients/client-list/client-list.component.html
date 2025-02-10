@@ -38,26 +38,28 @@
       <ng-template #body let-client>
         <tr>
           @for (col of columns(); track col.value) {
-            <td>
+            <td [class.disabled]="!client.active">
               @if (col.value !== '_actions') {
                 {{ client[col.value] }}
               } @else {
-                <div class="d-flex">
-                  <p-button
-                    class="ms-2"
-                    icon="pi pi-user-edit"
-                    aria-label="რედაქტირება"
-                    severity="secondary"
-                    (click)="onEdit(client.id)"
-                  />
-                  <p-button
-                    class="ms-2"
-                    icon="pi pi-trash"
-                    aria-label="წაშლა"
-                    severity="danger"
-                    (click)="onDelete(client.id)"
-                  />
-                </div>
+                @if (client.active) {
+                  <div class="d-flex">
+                    <p-button
+                      class="ms-2"
+                      icon="pi pi-user-edit"
+                      aria-label="რედაქტირება"
+                      severity="secondary"
+                      (click)="onEdit(client.id)"
+                    />
+                    <p-button
+                      class="ms-2"
+                      icon="pi pi-trash"
+                      aria-label="წაშლა"
+                      severity="danger"
+                      (click)="onDelete(client.id)"
+                    />
+                  </div>
+                }
               }
             </td>
           }

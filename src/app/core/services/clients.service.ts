@@ -30,6 +30,10 @@ export class ClientsService {
     return this.http.get<IClient>(`${this._config.API_URL}/clients`, {params: {id}})
   }
 
+  deactivateClient(params: any) {
+    return this.http.patch<IClient>(`${this._config.API_URL}/clients/${params.id}`, params)
+  }
+
   updateClient(params: IClient) {
     return this.http.put<IClient>(`${this._config.API_URL}/clients/${params.id}`, params)
   }

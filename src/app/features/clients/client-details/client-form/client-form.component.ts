@@ -94,6 +94,15 @@ export class ClientFormComponent {
     }
   }
 
+  onDeactivate() {
+    this._clientsService.deactivateClient({active: false, id: this.data().id})
+      .pipe(takeUntilDestroyed(this._destroyRef))
+      .subscribe(() => {
+        this._notifier.saySuccess('დეაქტივირდა წარმატებით');
+        this.goToBack();
+      })
+  }
+
   goToBack() {
     this._router.navigate(['/']);
   }
