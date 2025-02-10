@@ -1,4 +1,9 @@
-import {ApplicationConfig, importProvidersFrom, InjectionToken, provideZoneChangeDetection} from '@angular/core';
+import {
+  ApplicationConfig,
+  importProvidersFrom,
+  InjectionToken,
+  provideExperimentalZonelessChangeDetection,
+} from '@angular/core';
 import {provideRouter} from '@angular/router';
 import {provideAnimationsAsync} from '@angular/platform-browser/animations/async';
 import {providePrimeNG} from 'primeng/config';
@@ -19,7 +24,8 @@ export const appConfig: ApplicationConfig = {
       BrowserAnimationsModule,
       ToastrModule.forRoot(),
     ]),
-    provideZoneChangeDetection({eventCoalescing: true}),
+    // provideZoneChangeDetection({eventCoalescing: true}),
+    provideExperimentalZonelessChangeDetection(),
     provideRouter(routes),
     provideAnimationsAsync(),
     // provideHttpClient(withInterceptors([clientInterceptorInterceptor])),

@@ -56,6 +56,25 @@
         "address": "დაღმამშენებლის უმისამართ #3"
       },
       "id": "I8S0xIk"
+    },
+    {
+      "clientNumber": "123123",
+      "name": "ზაზა",
+      "lastName": "ზაზუნაია",
+      "gender": 2,
+      "personalNumber": "61554565755",
+      "mobile": "555555555",
+      "legalAddress": {
+        "country": "ასდ",
+        "city": "ქწე",
+        "address": "ქწე #12"
+      },
+      "actualAddress": {
+        "country": "ასდ",
+        "city": "ქწე",
+        "address": "ქწე #12"
+      },
+      "id": "mCFJHbz"
     }
   ]
 }
