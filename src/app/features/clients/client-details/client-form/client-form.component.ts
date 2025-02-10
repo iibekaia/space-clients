@@ -9,7 +9,7 @@ import {
   signal,
   WritableSignal
 } from '@angular/core';
-import {ButtonDirective} from 'primeng/button';
+import {Button, ButtonDirective} from 'primeng/button';
 import {Card} from 'primeng/card';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {InputText} from 'primeng/inputtext';
@@ -28,7 +28,8 @@ import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
     FormsModule,
     InputText,
     ReactiveFormsModule,
-    RadioButton
+    RadioButton,
+    Button
   ],
   templateUrl: './client-form.component.html',
   styleUrl: './client-form.component.scss'
