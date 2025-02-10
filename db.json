@@ -39,25 +39,6 @@
       "id": "2"
     },
     {
-      "id": "3",
-      "clientNumber": 222222,
-      "name": "zurab",
-      "lastName": "bekaia",
-      "gender": 1,
-      "personalNumber": "34991955252",
-      "mobile": "567430712",
-      "legalAddress": {
-        "country": "Georgia",
-        "city": "Tbilisi",
-        "address": "Mariam dadiani-anchabadzd"
-      },
-      "actualAddress": {
-        "country": "Georgia",
-        "city": "Tbilisi",
-        "address": "Mariam dadiani-anchabadzd"
-      }
-    },
-    {
       "clientNumber": "789456",
       "name": "ლუკა",
       "lastName": "შონია",

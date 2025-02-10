@@ -7,6 +7,7 @@ import {IClient} from '../../../core/models/clients.model';
 import {Card} from 'primeng/card';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {Paginator} from 'primeng/paginator';
+import {NotificationService} from '../../../core/services/notification.service';
 
 @Component({
   selector: 'app-client-list',
@@ -21,6 +22,7 @@ import {Paginator} from 'primeng/paginator';
   styleUrl: './client-list.component.scss'
 })
 export class ClientListComponent {
+  private _notifier = inject(NotificationService);
   private _route = inject(ActivatedRoute);
   private _router = inject(Router);
   private _destroyRef = inject(DestroyRef);
@@ -46,6 +48,15 @@ export class ClientListComponent {
 
   onAdd() {
     this._router.navigate(['dashboard', 'add'])
+  }
+
+  onDelete(id: string) {
+    this._clientsService.deleteClient(id)
+      .pipe(takeUntilDestroyed(this._destroyRef))
+      .subscribe(() => {
+        this._notifier.saySuccess('წაიშალა წარმატებით');
+        this.getClients();
+      })
   }
 
   onEdit(id: string) {

@@ -24,13 +24,22 @@
               @if (col.value !== '_actions') {
                 {{ client[col.value] }}
               } @else {
-                <button
-                  pButton
-                  type="button"
-                  label="რედაქტირება"
-                  severity="secondary"
-                  (click)="onEdit(client.id)"
-                ></button>
+                <div class="d-flex">
+                  <p-button
+                    class="ms-2"
+                    icon="pi pi-user-edit"
+                    aria-label="რედაქტირება"
+                    severity="secondary"
+                    (click)="onEdit(client.id)"
+                  />
+                  <p-button
+                    class="ms-2"
+                    icon="pi pi-trash"
+                    aria-label="წაშლა"
+                    severity="danger"
+                    (click)="onDelete(client.id)"
+                  />
+                </div>
               }
             </td>
           }

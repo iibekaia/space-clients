@@ -37,4 +37,8 @@ export class ClientsService {
   addClient(params: IClient) {
     return this.http.post<IClient>(`${this._config.API_URL}/clients`, params)
   }
+
+  deleteClient(id: string) {
+    return this.http.delete<IClient>(`${this._config.API_URL}/clients/${id}`)
+  }
 }
