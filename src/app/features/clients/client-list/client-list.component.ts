@@ -68,8 +68,12 @@ export class ClientListComponent {
     })
   }
 
-  onAdd() {
-    this._router.navigate(['dashboard', 'add'])
+  onAddAccount() {
+    this._router.navigate(['account', 'add'])
+  }
+
+  onAddClient() {
+    this._router.navigate(['client', 'add'])
   }
 
   onDelete(id: string) {
@@ -82,7 +86,7 @@ export class ClientListComponent {
   }
 
   onEdit(id: string) {
-    this._router.navigate(['dashboard', 'edit', id])
+    this._router.navigate(['client', 'edit', id])
   }
 
   onPageChange(event: any) {
