@@ -18,6 +18,7 @@ import {RadioButton} from 'primeng/radiobutton';
 import {Router} from '@angular/router';
 import {ClientsService} from '../../../../core/services/clients.service';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import {IAccount} from '../../../../core/models/accounts.model';
 
 @Component({
   selector: 'app-client-form',
@@ -39,6 +40,7 @@ export class ClientFormComponent {
   private _notifier = inject(NotificationService);
   private _router = inject(Router);
   public data: InputSignal<any> = input();
+  public accounts: WritableSignal<any> = signal([]);
   public form: WritableSignal<FormGroup> = signal(this._fb.group({
     clientNumber: ['', Validators.pattern(/^\d+$/)],
     name: ['', [
@@ -138,6 +140,16 @@ export class ClientFormComponent {
       this.form().get('mobile').setValue(data.mobile);
       this.form().get('legalAddress').setValue(data.legalAddress);
       this.form().get('actualAddress').setValue(data.actualAddress);
+
+      this.getAccountByClientId();
     }
+  }
+
+  private getAccountByClientId(){
+    this._clientsService.getAccountByClientId(this.data().id)
+      .pipe(takeUntilDestroyed(this._destroyRef))
+      .subscribe((accounts: IAccount[]) => {
+        this.accounts.set(accounts);
+    })
   }
 }

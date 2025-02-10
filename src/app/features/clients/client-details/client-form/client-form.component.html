@@ -1,4 +1,7 @@
 <p-card class="p-mb-3">
+  <label class="text-secondary font-size-20 d-flex align-items-center mb-3">
+    კლიენტის დეტალები
+  </label>
   <form [formGroup]="form()" (ngSubmit)="onSubmit()" class="flex justify-center row">
     <div class="d-flex flex-column p-field mb-2 col-md-6">
       <label class="mb-1" for="clientNumber">კლიენტის ნომერი</label>
@@ -154,3 +157,19 @@
     </div>
   </form>
 </p-card>
+@if (data().id) {
+  <p-card class="p-mb-3" styleClass="mt-3">
+    <label class="text-secondary font-size-20 d-flex align-items-center mb-3">
+      კლიენტის ანგარიშ(ებ)ი
+    </label>
+    @if (accounts().length) {
+      <form>
+
+      </form>
+    } @else {
+      <div class="alert alert-primary font-size-14" role="alert">
+        ანგარიშ(ებ)ი ვერ მოიძებნა
+      </div>
+    }
+  </p-card>
+}

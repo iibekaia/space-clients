@@ -1,8 +1,8 @@
 import {ResolveFn, Router} from '@angular/router';
 import {inject} from '@angular/core';
-import {ClientsService} from '../services/clients.service';
+import {ClientsService} from '../../services/clients.service';
 import {catchError, map, of} from 'rxjs';
-import {IClient} from '../models/clients.model';
+import {IClient} from '../../models/clients.model';
 
 export const clientResolverResolver: ResolveFn<any> = (route, state) => {
   const clientService = inject(ClientsService);

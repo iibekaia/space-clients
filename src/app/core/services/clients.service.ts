@@ -3,6 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {IClient} from '../models/clients.model';
 import {CONFIG} from '../../app.config';
 import {map} from 'rxjs';
+import {IAccount} from '../models/accounts.model';
 
 @Injectable({
   providedIn: 'root',
@@ -24,6 +25,10 @@ export class ClientsService {
         return {data: response.body || [], count};
       })
     );
+  }
+
+  getAccountByClientId(clientId: string) {
+    return this.http.get<IAccount[]>(`${this._config.API_URL}/accounts`, {params: {clientId}})
   }
 
   getClientById(id: string) {

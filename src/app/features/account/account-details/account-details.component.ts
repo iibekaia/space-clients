@@ -1,20 +1,17 @@
-import {Component, computed, inject, Signal, signal, WritableSignal} from '@angular/core';
-import {Card} from 'primeng/card';
+import {Component, inject, signal, WritableSignal} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {IClient} from '../../../core/models/clients.model';
+import {AccountFormComponent} from "./account-form/account-form.component";
 
 @Component({
-  selector: 'app-account-details',
-  imports: [
-    Card,
-  ],
-  templateUrl: './account-details.component.html',
-  styleUrl: './account-details.component.scss'
+    selector: 'app-account-details',
+    imports: [
+        AccountFormComponent,
+    ],
+    templateUrl: './account-details.component.html',
+    styleUrl: './account-details.component.scss'
 })
 export class AccountDetailsComponent {
-  private _route = inject(ActivatedRoute);
-  public accounts: WritableSignal<IClient[]> = signal(this._route.snapshot.data['accounts']);
-  public account: Signal<any> = computed(() => {
-    return this.accounts() !== undefined && this.accounts()[0];
-  });
+    private _route = inject(ActivatedRoute);
+    public clients: WritableSignal<IClient[]> = signal(this._route.snapshot.data['clients']);
 }

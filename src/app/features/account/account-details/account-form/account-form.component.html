@@ -1,0 +1,99 @@
+<p-card class="p-mb-3">
+  <p-select
+    [options]="clients()"
+    [(ngModel)]="selectedClient"
+    optionLabel="fullName"
+    placeholder="აირჩიე კლიენტი"
+    class="w-full md:w-80"
+  />
+  <form [formGroup]="form()" (ngSubmit)="onSubmit()" [class.disabled]="!selectedClient()?.id">
+    <p-table
+      styleClass="mt-3 border overflow-none"
+      #table
+      [value]="formArray().controls"
+      [tableStyle]="{'min-width': '60rem'}"
+    >
+      <ng-template #header>
+        <tr>
+          <th>#</th>
+          <th style="width:20%">ანგარიშის ნომერი</th>
+          <th style="width:20%">ანგარიშის ტიპი</th>
+          <th>ვალუტა</th>
+          <th style="width:20%">ანგარიშის სტატუსი</th>
+        </tr>
+      </ng-template>
+      <ng-template #body let-row let-i="rowIndex">
+        <tr [formGroup]="row">
+          <td>{{ i + 1 }}</td>
+          <td><input id="number" pInputText formControlName="number"/></td>
+          <td>
+            <p-select
+              id="type"
+              formControlName="type"
+              [options]="types()"
+              optionLabel="name"
+              placeholder="აირჩიე ტიპი"
+              class="w-full md:w-40"
+            />
+          </td>
+          <td>
+            <p-select
+              id="currency"
+              formControlName="currency"
+              [options]="currencies()"
+              optionLabel="name"
+              placeholder="აირჩიე ვალუტა"
+              class="w-full md:w-40"
+            />
+          </td>
+          <td>
+            <p-select
+              id="status"
+              formControlName="status"
+              [options]="statuses()"
+              optionLabel="name"
+              placeholder="აირჩიე სტატუსი"
+              class="w-full md:w-40"
+            />
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template #footer>
+        <tr>
+          <td>
+            <p-button type="button" icon="pi pi-plus" severity="primary" (click)="onAddRow()"/>
+          </td>
+          <td>
+            <div class="td-placeholder"></div>
+          </td>
+          <td>
+            <div class="td-placeholder"></div>
+          </td>
+          <td>
+            <div class="td-placeholder"></div>
+          </td>
+          <td>
+            <div class="td-placeholder"></div>
+          </td>
+          <td>
+            <div class="td-placeholder"></div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+
+    <div class="d-flex w-100 align-items-center mt-3">
+      <div class="d-flex w-100 justify-content-end">
+        <p-button
+          type="button"
+          label="უკან"
+          icon="pi pi-arrow-left"
+          severity="secondary"
+          class="ms-2"
+          (onClick)="goToBack()"
+        />
+        <p-button type="submit" [label]="'შენახვა'" severity="primary" class="ms-2"/>
+      </div>
+    </div>
+  </form>
+</p-card>
