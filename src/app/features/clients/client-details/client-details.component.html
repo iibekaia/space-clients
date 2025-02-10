@@ -1,6 +1,7 @@
 <div class="mt-3">
   <p-card styleClass="mb-3">
-    <label class=" text-secondary font-size-20">
+    <label class="text-secondary font-size-20 d-flex align-items-center">
+      <i class="font-size-20 me-2 pi {{ client().id  ? 'pi-user-edit' : 'pi-user-plus'}}"></i>
       {{ client().id ? 'კლიენტის რედაქტირება' : 'კლიენტის დამატება' }}
     </label>
   </p-card>
