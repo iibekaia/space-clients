@@ -126,6 +126,10 @@ export class ClientFormComponent {
     this._router.navigate(['/']);
   }
 
+  onEditAccounts() {
+    this._router.navigate(['account', 'edit', this.data().id])
+  }
+
   private addClient() {
     const formValue = this.form().getRawValue();
     this._clientsService.addClient({...formValue, active: true, fileId: this.uploadedFile().id})

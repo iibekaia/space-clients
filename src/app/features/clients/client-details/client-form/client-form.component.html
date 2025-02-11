@@ -98,7 +98,7 @@
               [value]="gender.value"
               formControlName="gender">
             </p-radiobutton>
-            <label [for]="'gender_'+gender.value" class="ms-2">{{ gender.name }}</label>
+            <label [for]="'gender_'+gender.value" class="ms-3">{{ gender.name }}</label>
           </div>
         }
       </div>
@@ -185,18 +185,27 @@
           icon="pi pi-arrow-left"
           severity="secondary"
           (onClick)="goToBack()"
-          class="ms-2"
+          class="ms-3"
         />
-        <p-button type="submit" [label]="data().id ? 'რედაქტირება' : 'შენახვა'" severity="primary" class="ms-2"/>
+        <p-button type="submit" [label]="data().id ? 'რედაქტირება' : 'შენახვა'" severity="primary" class="ms-3"/>
       </div>
     </div>
   </form>
 </p-card>
 @if (data().id) {
   <p-card class="p-mb-3" styleClass="mt-3">
-    <label class="text-secondary font-size-20 d-flex align-items-center mb-3">
-      კლიენტის ანგარიშ(ებ)ი
-    </label>
+    <div class="d-flex align-items-center mb-3">
+      <label class="text-secondary font-size-20 d-flex align-items-center">
+        კლიენტის ანგარიშ(ებ)ი
+      </label>
+      <p-button
+        type="button"
+        (click)="onEditAccounts()"
+        [label]=" 'რედაქტირება'"
+        severity="contrast"
+        class="ms-3"
+      />
+    </div>
     @if (accounts()?.length) {
       <app-client-accounts-form [accounts]="accounts()"></app-client-accounts-form>
     } @else {
