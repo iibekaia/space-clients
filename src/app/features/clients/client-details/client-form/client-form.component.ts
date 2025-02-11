@@ -20,6 +20,8 @@ import {ClientsService} from '../../../../core/services/clients.service';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {ClientAccountsFormComponent} from '../client-accounts-form/client-accounts-form.component';
 import {FloatLabel} from 'primeng/floatlabel';
+import {ADD_CLIENT} from '../../../../state/client/client.actions';
+import {Store} from '@ngrx/store';
 
 @Component({
   selector: 'app-client-form',
@@ -37,6 +39,7 @@ import {FloatLabel} from 'primeng/floatlabel';
   styleUrl: './client-form.component.scss'
 })
 export class ClientFormComponent {
+  private _store = inject(Store);
   private _destroyRef = inject(DestroyRef);
   private _clientsService = inject(ClientsService);
   private _fb = inject(FormBuilder);
@@ -117,7 +120,7 @@ export class ClientFormComponent {
     this._clientsService.updateClientDetails({active: false, id: this.data().id})
       .pipe(takeUntilDestroyed(this._destroyRef))
       .subscribe(() => {
-        this._notifier.saySuccess('დეაქტივირდა წარმატებით');
+        this._notifier.saySuccess('კლიენტი დეაქტივირდა წარმატებით');
         this.goToBack();
       })
   }
@@ -136,12 +139,7 @@ export class ClientFormComponent {
 
   private addClient() {
     const formValue = this.form().getRawValue();
-    this._clientsService.addClient({...formValue, active: true, fileId: this.uploadedFile().id})
-      .pipe(takeUntilDestroyed(this._destroyRef))
-      .subscribe(() => {
-        this._notifier.saySuccess('დაემატა წარმატებით');
-        this.goToBack();
-      })
+    this._store.dispatch(ADD_CLIENT({client: {...formValue, active: true, fileId: this.uploadedFile()?.id}}));
   }
 
   private updateClient() {
@@ -155,13 +153,13 @@ export class ClientFormComponent {
     if (this.uploadedFile()?.id) {
       params = {
         ...params,
-        fileId: this.uploadedFile().id
+        fileId: this.uploadedFile()?.id
       }
     }
     this._clientsService.updateClient(params)
       .pipe(takeUntilDestroyed(this._destroyRef))
       .subscribe(() => {
-        this._notifier.saySuccess('განახლდა წარმატებით');
+        this._notifier.saySuccess('კლიენტის დეტალები განახლდა წარმატებით');
         this.goToBack();
       })
   }
@@ -216,11 +214,11 @@ export class ClientFormComponent {
         next: (file) => {
           this.uploadedFile.set(file)
           this.imgLoader.set(false);
-          this._notifier.saySuccess('ფოტო აიტვირთა წარმატებით');
+          this._notifier.saySuccess('კლიენტის ფოტო აიტვირთა წარმატებით');
         },
         error: () => {
           this.imgLoader.set(false);
-          this._notifier.sayError('ფოტო აიტვირთისას დაფიქსირდა შეცდომა');
+          this._notifier.sayError('კლიენტის ფოტოს ატვირთისას დაფიქსირდა შეცდომა');
         }
       });
     };

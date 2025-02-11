@@ -39,3 +39,10 @@ export const Genders = [
 export interface AppConfig {
   API_URL: string;
 }
+
+export enum EEffect {
+  LOAD_CLIENTS = 'LOAD_CLIENTS',
+  LOAD_CLIENTS_SUCCESS = 'LOAD_CLIENTS_SUCCESS',
+  ADD_CLIENT = 'ADD_CLIENT',
+  ADD_CLIENT_SUCCESS = 'ADD_CLIENT_SUCCESS',
+}

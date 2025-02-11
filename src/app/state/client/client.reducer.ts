@@ -9,5 +9,12 @@ export const clientReducer = createReducer(
   }),
   on(ACTIONS.LOAD_CLIENTS_SUCCESS, (state, payload) => {
     return payload;
+  }),
+  on(ACTIONS.ADD_CLIENT_SUCCESS, (state, payload) => {
+    return {
+      ...state,
+      data: [...(state.data || []), payload.client],
+      count: (state.count || 1) + 1,
+    };
   })
 )
