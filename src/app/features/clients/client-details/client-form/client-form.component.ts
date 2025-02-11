@@ -76,12 +76,27 @@ export class ClientFormComponent {
     }),
   }));
   public genders: WritableSignal<{ value: EGender, name: string }[]> = signal(Genders);
+  public imgLoader: WritableSignal<boolean> = signal(false);
+  public uploadedFile: WritableSignal<{ filename: string, id: any, data: string }> = signal(undefined);
+  public selectedFile: WritableSignal<File | null> = signal(null);
 
   constructor() {
     effect(() => {
       this.updateForm(this.data());
     });
   }
+
+  onFileSelected(event: Event) {
+    const fileInput = event.target as HTMLInputElement;
+    if (fileInput.files && fileInput.files.length > 0) {
+      this.imgLoader.set(true);
+      this.selectedFile.set(fileInput.files[0]);
+      setTimeout(() => {
+        this.uploadImage();
+      }, 100)
+    }
+  }
+
 
   onSubmit() {
     if (this.form().invalid) {
@@ -111,7 +126,7 @@ export class ClientFormComponent {
 
   private addClient() {
     const formValue = this.form().getRawValue();
-    this._clientsService.addClient({...formValue, active: true})
+    this._clientsService.addClient({...formValue, active: true, fileId: this.uploadedFile().id})
       .pipe(takeUntilDestroyed(this._destroyRef))
       .subscribe(() => {
         this._notifier.saySuccess('დაემატა წარმატებით');
@@ -122,7 +137,17 @@ export class ClientFormComponent {
   private updateClient() {
     const formValue = this.form().getRawValue();
 
-    this._clientsService.updateClient({...formValue, id: this.data().id})
+    let params: any = {
+      ...formValue,
+      id: this.data().id
+    }
+    if (this.uploadedFile().id) {
+      params = {
+        ...params,
+        fileId: this.uploadedFile().id
+      }
+    }
+    this._clientsService.updateClient(params)
       .pipe(takeUntilDestroyed(this._destroyRef))
       .subscribe(() => {
         this._notifier.saySuccess('განახლდა წარმატებით');
@@ -142,14 +167,51 @@ export class ClientFormComponent {
       this.form().get('actualAddress').setValue(data.actualAddress);
 
       this.getAccountByClientId();
+      this.getImage();
     }
   }
 
-  private getAccountByClientId(){
+  private getAccountByClientId() {
     this._clientsService.getAccountByClientId(this.data().id)
       .pipe(takeUntilDestroyed(this._destroyRef))
       .subscribe((accounts: IAccount[]) => {
         this.accounts.set(accounts);
-    })
+      })
+  }
+
+  private getImage() {
+    if (this.data().fileId) {
+      this._clientsService.getImage(this.data().fileId)
+        .pipe(takeUntilDestroyed(this._destroyRef))
+        .subscribe(image => {
+          this.uploadedFile.set(image);
+        });
+    }
+  }
+
+  private uploadImage() {
+    if (!this.selectedFile()) return;
+
+    const reader = new FileReader();
+    reader.readAsDataURL(this.selectedFile());
+    reader.onload = () => {
+      const base64String = reader.result as string;
+      const imageData = {
+        filename: this.selectedFile()!.name,
+        data: base64String
+      };
+
+      this._clientsService.uploadImage(imageData).subscribe({
+        next: (file) => {
+          this.uploadedFile.set(file)
+          this.imgLoader.set(false);
+          this._notifier.saySuccess('ფოტო აიტვირთა წარმატებით');
+        },
+        error: () => {
+          this.imgLoader.set(false);
+          this._notifier.sayError('ფოტო აიტვირთისას დაფიქსირდა შეცდომა');
+        }
+      });
+    };
   }
 }

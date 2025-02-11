@@ -2,6 +2,29 @@
   <label class="text-secondary font-size-20 d-flex align-items-center mb-3">
     კლიენტის დეტალები
   </label>
+  <div class="d-flex">
+    @if (uploadedFile()?.id) {
+      <div class="d-flex border rounded-2 mb-3 overflow-hidden">
+        <img [src]="uploadedFile().data" alt="{{ uploadedFile()?.filename }}" style="height: 100px"/>
+      </div>
+    } @else {
+      <input
+        type="file"
+        (change)="onFileSelected($event)"
+        #fileInput
+        hidden
+      />
+
+      <p-button
+        [loading]="imgLoader()"
+        type="button"
+        icon="pi pi-upload"
+        label="ფოტოს ატვირთვა"
+        class="mb-3"
+        (click)="fileInput.click()">
+      </p-button>
+    }
+  </div>
   <form [formGroup]="form()" (ngSubmit)="onSubmit()" class="flex justify-center row">
     <div class="d-flex flex-column p-field mb-2 col-md-6">
       <label class="mb-1" for="clientNumber">კლიენტის ნომერი</label>
