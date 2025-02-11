@@ -3,14 +3,12 @@ import {ReactiveFormsModule} from '@angular/forms';
 import {ClientFormComponent} from './client-form/client-form.component';
 import {ActivatedRoute} from '@angular/router';
 import {IClient} from '../../../core/models/clients.model';
-import {Card} from 'primeng/card';
 
 @Component({
   selector: 'app-client-details',
   imports: [
     ReactiveFormsModule,
     ClientFormComponent,
-    Card,
   ],
   templateUrl: './client-details.component.html',
   styleUrl: './client-details.component.scss'

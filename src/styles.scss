@@ -4,7 +4,7 @@
 
 * {
   font-family: 'Firago Latin', sans-serif;
-  font-weight: 600;
+  font-weight: 500;
 }
 
 body {
@@ -13,4 +13,26 @@ body {
 
 .disabled {
   opacity: 0.2;
+  pointer-events: none;
+}
+
+form {
+  td .td-placeholder {
+    height: 10px;
+    display: flex;
+    width: 100%;
+    background-color: #f7f8fa;
+  }
+}
+
+.overflow-none {
+  overflow: unset !important;
+
+  .p-datatable-table-container {
+    overflow: unset !important;
+  }
+}
+
+.ng-touched.ng-invalid {
+  border-color: #f87171 !important;
 }

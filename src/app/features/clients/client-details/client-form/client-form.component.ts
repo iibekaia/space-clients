@@ -18,6 +18,8 @@ import {RadioButton} from 'primeng/radiobutton';
 import {Router} from '@angular/router';
 import {ClientsService} from '../../../../core/services/clients.service';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import {ClientAccountsFormComponent} from '../client-accounts-form/client-accounts-form.component';
+import {FloatLabel} from 'primeng/floatlabel';
 
 @Component({
   selector: 'app-client-form',
@@ -27,7 +29,9 @@ import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
     InputText,
     ReactiveFormsModule,
     RadioButton,
-    Button
+    Button,
+    ClientAccountsFormComponent,
+    FloatLabel
   ],
   templateUrl: './client-form.component.html',
   styleUrl: './client-form.component.scss'
@@ -39,8 +43,8 @@ export class ClientFormComponent {
   private _notifier = inject(NotificationService);
   private _router = inject(Router);
   public data: InputSignal<any> = input();
+  public accounts: WritableSignal<any> = signal([]);
   public form: WritableSignal<FormGroup> = signal(this._fb.group({
-    clientNumber: ['', Validators.pattern(/^\d+$/)],
     name: ['', [
       Validators.required,
       Validators.minLength(2),
@@ -74,12 +78,27 @@ export class ClientFormComponent {
     }),
   }));
   public genders: WritableSignal<{ value: EGender, name: string }[]> = signal(Genders);
+  public imgLoader: WritableSignal<boolean> = signal(false);
+  public uploadedFile: WritableSignal<{ filename: string, id: any, data: string }> = signal(undefined);
+  public selectedFile: WritableSignal<File | null> = signal(null);
 
   constructor() {
     effect(() => {
       this.updateForm(this.data());
     });
   }
+
+  onFileSelected(event: Event) {
+    const fileInput = event.target as HTMLInputElement;
+    if (fileInput.files && fileInput.files.length > 0) {
+      this.imgLoader.set(true);
+      this.selectedFile.set(fileInput.files[0]);
+      setTimeout(() => {
+        this.uploadImage();
+      }, 100)
+    }
+  }
+
 
   onSubmit() {
     if (this.form().invalid) {
@@ -95,7 +114,7 @@ export class ClientFormComponent {
   }
 
   onDeactivate() {
-    this._clientsService.deactivateClient({active: false, id: this.data().id})
+    this._clientsService.updateClientDetails({active: false, id: this.data().id})
       .pipe(takeUntilDestroyed(this._destroyRef))
       .subscribe(() => {
         this._notifier.saySuccess('დეაქტივირდა წარმატებით');
@@ -107,9 +126,17 @@ export class ClientFormComponent {
     this._router.navigate(['/']);
   }
 
+  goToAccountsForm() {
+    if (this.accounts()?.length) {
+      this._router.navigate(['account', 'edit', this.data().id])
+    } else {
+      this._router.navigate(['account', 'add', this.data().id])
+    }
+  }
+
   private addClient() {
     const formValue = this.form().getRawValue();
-    this._clientsService.addClient({...formValue, active: true})
+    this._clientsService.addClient({...formValue, active: true, fileId: this.uploadedFile().id})
       .pipe(takeUntilDestroyed(this._destroyRef))
       .subscribe(() => {
         this._notifier.saySuccess('დაემატა წარმატებით');
@@ -120,7 +147,18 @@ export class ClientFormComponent {
   private updateClient() {
     const formValue = this.form().getRawValue();
 
-    this._clientsService.updateClient({...formValue, id: this.data().id})
+    let params: any = {
+      ...formValue,
+      active: (this.data()?.active || false),
+      id: this.data().id
+    }
+    if (this.uploadedFile()?.id) {
+      params = {
+        ...params,
+        fileId: this.uploadedFile().id
+      }
+    }
+    this._clientsService.updateClient(params)
       .pipe(takeUntilDestroyed(this._destroyRef))
       .subscribe(() => {
         this._notifier.saySuccess('განახლდა წარმატებით');
@@ -130,7 +168,6 @@ export class ClientFormComponent {
 
   private updateForm(data: IClient) {
     if (data) {
-      this.form().get('clientNumber').setValue(data.clientNumber);
       this.form().get('name').setValue(data.name);
       this.form().get('personalNumber').setValue(data.personalNumber);
       this.form().get('lastName').setValue(data.lastName);
@@ -138,6 +175,54 @@ export class ClientFormComponent {
       this.form().get('mobile').setValue(data.mobile);
       this.form().get('legalAddress').setValue(data.legalAddress);
       this.form().get('actualAddress').setValue(data.actualAddress);
+
+      this.getAccountByClientId();
+      this.getImage();
     }
+  }
+
+  private getAccountByClientId() {
+    this._clientsService.getAccountByClientId(this.data().id)
+      .pipe(takeUntilDestroyed(this._destroyRef))
+      .subscribe((data: any) => {
+        const clientAccounts = (data || [])[0]?.accounts;
+        this.accounts.set(clientAccounts);
+      })
+  }
+
+  private getImage() {
+    if (this.data().fileId) {
+      this._clientsService.getImage(this.data().fileId)
+        .pipe(takeUntilDestroyed(this._destroyRef))
+        .subscribe(image => {
+          this.uploadedFile.set(image);
+        });
+    }
+  }
+
+  private uploadImage() {
+    if (!this.selectedFile()) return;
+
+    const reader = new FileReader();
+    reader.readAsDataURL(this.selectedFile());
+    reader.onload = () => {
+      const base64String = reader.result as string;
+      const imageData = {
+        filename: this.selectedFile()!.name,
+        data: base64String
+      };
+
+      this._clientsService.uploadImage(imageData).subscribe({
+        next: (file) => {
+          this.uploadedFile.set(file)
+          this.imgLoader.set(false);
+          this._notifier.saySuccess('ფოტო აიტვირთა წარმატებით');
+        },
+        error: () => {
+          this.imgLoader.set(false);
+          this._notifier.sayError('ფოტო აიტვირთისას დაფიქსირდა შეცდომა');
+        }
+      });
+    };
   }
 }

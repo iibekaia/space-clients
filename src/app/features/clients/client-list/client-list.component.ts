@@ -3,11 +3,13 @@ import {TableModule} from 'primeng/table';
 import {Button} from 'primeng/button';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ClientsService} from '../../../core/services/clients.service';
-import {IClient} from '../../../core/models/clients.model';
 import {Card} from 'primeng/card';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {Paginator} from 'primeng/paginator';
 import {NotificationService} from '../../../core/services/notification.service';
+import {GENDERS_MAP} from '../../../core/models/clients.model';
+import {Store} from '@ngrx/store';
+import {LOAD_CLIENTS} from '../../../state/client/client.actions';
 
 @Component({
   selector: 'app-client-list',
@@ -21,6 +23,7 @@ import {NotificationService} from '../../../core/services/notification.service';
   styleUrl: './client-list.component.scss'
 })
 export class ClientListComponent {
+  private _store = inject(Store);
   private _notifier = inject(NotificationService);
   private _route = inject(ActivatedRoute);
   private _router = inject(Router);
@@ -35,7 +38,6 @@ export class ClientListComponent {
   public clients: WritableSignal<any[]> = signal([]);
   public total: WritableSignal<number> = signal(0);
   public columns: WritableSignal<{ value: string; title: string }[]> = signal([
-    {value: 'clientNumber', title: 'კლიენტის N'},
     {value: 'name', title: 'სახელი'},
     {value: 'lastName', title: 'გვარი'},
     {value: 'personalNumber', title: 'პ/ნ'},
@@ -43,14 +45,17 @@ export class ClientListComponent {
     {value: 'mobile', title: 'ტელ:'},
     {value: '_actions', title: 'ქმედება'}
   ])
-  public _page: WritableSignal<number> = signal(this._snapshot()?._page || 0);
-  public _limit: WritableSignal<number> = signal(this._snapshot()?._limit || 10);
+  public first: WritableSignal<number> = signal(((this._snapshot()?.page - 1) * this._snapshot()?.limit) || 0);
+  public page: WritableSignal<number> = signal(this._snapshot()?.page || 0);
+  public limit: WritableSignal<number> = signal(this._snapshot()?.limit || 10);
   public sortField: WritableSignal<string> = signal(this._snapshot()?.field || undefined)
   public sortOrder: WritableSignal<number> = signal(+this._snapshot()?.order || undefined)
   public hasFilter: WritableSignal<boolean> = signal(false);
+  public GENDERS_MAP = GENDERS_MAP;
 
   constructor() {
-    this.getClients();
+    this.dispatchClients();
+    this.listenToClients();
   }
 
   onSort(event: { field: string, order: number }) {
@@ -81,7 +86,7 @@ export class ClientListComponent {
       .pipe(takeUntilDestroyed(this._destroyRef))
       .subscribe(() => {
         this._notifier.saySuccess('წაიშალა წარმატებით');
-        this.getClients();
+        this.dispatchClients();
       })
   }
 
@@ -91,32 +96,36 @@ export class ClientListComponent {
 
   onPageChange(event: any) {
     let queryParams: any = {};
-    if (event.first !== this._page()) {
-      this._page.set(event.first);
-      queryParams = {...queryParams, _page: this._page()}
+    this.first.set(event.first)
+    const page = event.page + 1;
+    if (page !== this.page()) {
+      this.page.set(page);
+      queryParams = {...queryParams, page: this.page()}
     }
-    if (event.rows !== this._page()) {
-      this._limit.set(event.rows);
-      queryParams = {...queryParams, _limit: this._limit()}
+    if (event.rows !== this.limit()) {
+      this.limit.set(event.rows);
+      queryParams = {...queryParams, limit: this.limit()}
     }
     this._router.navigate([], {
       relativeTo: this._route,
       queryParams: queryParams,
       queryParamsHandling: 'merge',
     });
-    this.getClients();
+    this.dispatchClients();
   }
 
   get generateSnapShot() {
     return this._route.snapshot.queryParams;
   }
 
-  private getClients() {
-    this._clientsService.getClients({_page: this._page(), _limit: this._limit()})
-      .pipe(takeUntilDestroyed(this._destroyRef))
-      .subscribe((response: { data: IClient[], count: number }) => {
-        this.clients.set(response.data);
-        this.total.set(response.count);
-      })
+  private listenToClients() {
+    this._store.select('clients').subscribe(response => {
+      this.clients.set(response.data);
+      this.total.set(response.count);
+    })
+  }
+
+  private dispatchClients() {
+    this._store.dispatch(LOAD_CLIENTS({page: this.page(), limit: this.limit()}));
   }
 }

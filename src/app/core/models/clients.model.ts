@@ -1,9 +1,11 @@
 export interface IClient {
   id: any;
+  accountsId?: any;
   active: boolean;
-  clientNumber: string;
+  accounts?: any;
   name: number;
   lastName: string;
+  fullName?: string;
   gender: number;
   personalNumber: string;
   mobile: string;
@@ -24,9 +26,14 @@ export enum EGender {
   FEMALE = 2
 }
 
+export const GENDERS_MAP = {
+  [EGender.MALE]: 'კაცი',
+  [EGender.FEMALE]: 'ქალი'
+}
+
 export const Genders = [
-  {value: EGender.MALE, name: 'კაცი'},
-  {value: EGender.FEMALE, name: 'ქალი'},
+  {value: EGender.MALE, name: GENDERS_MAP[EGender.MALE]},
+  {value: EGender.FEMALE, name: GENDERS_MAP[EGender.FEMALE]},
 ]
 
 export interface AppConfig {
