@@ -75,7 +75,8 @@
         "address": "ქწე #12"
       },
       "id": "mCFJHbz",
-      "active": true
+      "active": true,
+      "accountsId": 4
     },
     {
       "name": "imeda",
@@ -123,6 +124,22 @@
         }
       ],
       "id": 3
+    },
+    {
+      "clientId": "mCFJHbz",
+      "accounts": [
+        {
+          "currencyId": 2,
+          "statusId": 1,
+          "typeId": 1
+        },
+        {
+          "currencyId": 3,
+          "statusId": 2,
+          "typeId": 3
+        }
+      ],
+      "id": 4
     }
   ],
   "images": [

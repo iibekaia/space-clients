@@ -32,3 +32,7 @@ form {
     overflow: unset !important;
   }
 }
+
+.ng-touched.ng-invalid {
+  border-color: #f87171 !important;
+}

@@ -126,8 +126,12 @@ export class ClientFormComponent {
     this._router.navigate(['/']);
   }
 
-  onEditAccounts() {
-    this._router.navigate(['account', 'edit', this.data().id])
+  goToAccountsForm() {
+    if (this.accounts()?.length) {
+      this._router.navigate(['account', 'edit', this.data().id])
+    } else {
+      this._router.navigate(['account', 'add', this.data().id])
+    }
   }
 
   private addClient() {

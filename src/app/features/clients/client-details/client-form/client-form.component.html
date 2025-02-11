@@ -200,8 +200,8 @@
       </label>
       <p-button
         type="button"
-        (click)="onEditAccounts()"
-        [label]=" 'რედაქტირება'"
+        (click)="goToAccountsForm()"
+        [label]="accounts()?.length ? 'რედაქტირება' : 'დამატება'"
         severity="contrast"
         class="ms-3"
       />
