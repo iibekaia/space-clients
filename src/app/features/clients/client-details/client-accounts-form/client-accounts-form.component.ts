@@ -1,7 +1,7 @@
 import {Component, input, InputSignal, signal, WritableSignal} from '@angular/core';
 import {ReactiveFormsModule} from "@angular/forms";
 import {TableModule} from "primeng/table";
-import {CURRENCIES, STATUSES, TYPES} from '../../../../core/models/accounts.model';
+import {CURRENCIES_MAP, STATUSES_MAP, TYPES_MAP} from '../../../../core/models/accounts.model';
 
 @Component({
   selector: 'app-client-accounts-form',
@@ -14,9 +14,9 @@ import {CURRENCIES, STATUSES, TYPES} from '../../../../core/models/accounts.mode
 })
 export class ClientAccountsFormComponent {
   public accounts: InputSignal<any> = input();
-  public currencies: WritableSignal<any> = signal(CURRENCIES);
-  public statuses: WritableSignal<any> = signal(STATUSES);
-  public types: WritableSignal<any> = signal(TYPES);
+  public CURRENCIES_MAP = CURRENCIES_MAP;
+  public STATUSES_MAP = STATUSES_MAP;
+  public TYPES_MAP = TYPES_MAP;
 
   constructor() {
     setTimeout(() => {

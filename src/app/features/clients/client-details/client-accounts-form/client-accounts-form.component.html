@@ -14,10 +14,10 @@
     </ng-template>
     <ng-template #body let-account let-i="rowIndex">
       <tr>
-        <td> {{ i + 1 }} </td>
-        <td> {{ account.typeId }}</td>
-        <td> {{ account.currencyId }}</td>
-        <td> {{ account.statusId }}</td>
+        <td> {{ i + 1 }}</td>
+        <td> {{ CURRENCIES_MAP[account.typeId] }}</td>
+        <td> {{ TYPES_MAP[account.currencyId] }}</td>
+        <td> {{ STATUSES_MAP[account.statusId] }}</td>
       </tr>
     </ng-template>
   </p-table>

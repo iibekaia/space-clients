@@ -10,11 +10,12 @@ import {providePrimeNG} from 'primeng/config';
 import Aura from '@primeng/themes/aura';
 import {routes} from './app.routes';
 import {API_URL} from '../config/config';
-import {provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
+import {provideHttpClient, withInterceptors} from '@angular/common/http';
 import {ButtonModule} from 'primeng/button';
 import {provideToastr, ToastrModule} from 'ngx-toastr';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {AppConfig} from './core/models/clients.model';
+import {clientInterceptorInterceptor} from './core/interceptors/client-interceptor.interceptor';
 
 export const CONFIG = new InjectionToken<AppConfig>('CONFIG');
 export const appConfig: ApplicationConfig = {
@@ -28,8 +29,8 @@ export const appConfig: ApplicationConfig = {
     provideExperimentalZonelessChangeDetection(),
     provideRouter(routes),
     provideAnimationsAsync(),
-    // provideHttpClient(withInterceptors([clientInterceptorInterceptor])),
-    provideHttpClient(withInterceptorsFromDi()),
+    // provideHttpClient(withInterceptorsFromDi()),
+    provideHttpClient(withInterceptors([clientInterceptorInterceptor])),
     provideToastr({
       timeOut: 3000,
       positionClass: 'toast-bottom-left',

@@ -27,19 +27,35 @@ export enum EType {
   ACCUMULATIVE = 3
 }
 
+export const CURRENCIES_MAP = {
+  [ECurrencyType.GEL]: 'GEL',
+  [ECurrencyType.USD]: 'USD',
+  [ECurrencyType.EUR]: 'EUR',
+}
 export const CURRENCIES = [
-  {name: "GEL", value: ECurrencyType.GEL},
-  {name: "USD", value: ECurrencyType.USD},
-  {name: "EUR", value: ECurrencyType.EUR},
+  {name: CURRENCIES_MAP[ECurrencyType.GEL], value: ECurrencyType.GEL},
+  {name: CURRENCIES_MAP[ECurrencyType.USD], value: ECurrencyType.USD},
+  {name: CURRENCIES_MAP[ECurrencyType.EUR], value: ECurrencyType.EUR},
 ]
+
+export const STATUSES_MAP = {
+  [EType.ONGOING]: 'აქტიური',
+  [EType.SAVING]: 'გახურული',
+}
 
 export const STATUSES = [
-  {name: "აქტიური", value: EStatusType.ACTIVE},
-  {name: "გახურული", value: EStatusType.CLOSED},
+  {name: STATUSES_MAP[EStatusType.ACTIVE], value: EStatusType.ACTIVE},
+  {name: STATUSES_MAP[EStatusType.CLOSED], value: EStatusType.CLOSED},
 ]
 
+export const TYPES_MAP = {
+  [EType.ONGOING]: 'მიმდინარე',
+  [EType.SAVING]: 'შემნახველი',
+  [EType.ACCUMULATIVE]: 'დაგროვებითი',
+}
+
 export const TYPES = [
-  {name: "მიმდინარე", value: EType.ONGOING},
-  {name: "შემნახველი", value: EType.SAVING},
-  {name: "დაგროვებითი", value: EType.ACCUMULATIVE},
+  {name: TYPES_MAP[EType.ONGOING], value: EType.ONGOING},
+  {name: TYPES_MAP[EType.SAVING], value: EType.SAVING},
+  {name: TYPES_MAP[EType.ACCUMULATIVE], value: EType.ACCUMULATIVE},
 ]
