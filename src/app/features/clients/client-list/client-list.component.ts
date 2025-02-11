@@ -8,6 +8,7 @@ import {Card} from 'primeng/card';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {Paginator} from 'primeng/paginator';
 import {NotificationService} from '../../../core/services/notification.service';
+import {GENDERS_MAP} from '../../../core/models/clients.model';
 
 @Component({
   selector: 'app-client-list',
@@ -42,11 +43,13 @@ export class ClientListComponent {
     {value: 'mobile', title: 'ტელ:'},
     {value: '_actions', title: 'ქმედება'}
   ])
-  public _page: WritableSignal<number> = signal(this._snapshot()?._page || 0);
-  public _limit: WritableSignal<number> = signal(this._snapshot()?._limit || 10);
+  public first: WritableSignal<number> = signal(((this._snapshot()?.page - 1) * this._snapshot()?.limit) || 0);
+  public page: WritableSignal<number> = signal(this._snapshot()?.page || 0);
+  public limit: WritableSignal<number> = signal(this._snapshot()?.limit || 10);
   public sortField: WritableSignal<string> = signal(this._snapshot()?.field || undefined)
   public sortOrder: WritableSignal<number> = signal(+this._snapshot()?.order || undefined)
   public hasFilter: WritableSignal<boolean> = signal(false);
+  public GENDERS_MAP = GENDERS_MAP;
 
   constructor() {
     this.getClients();
@@ -90,13 +93,15 @@ export class ClientListComponent {
 
   onPageChange(event: any) {
     let queryParams: any = {};
-    if (event.first !== this._page()) {
-      this._page.set(event.first);
-      queryParams = {...queryParams, _page: this._page()}
+    this.first.set(event.first)
+    const page = event.page + 1;
+    if (page !== this.page()) {
+      this.page.set(page);
+      queryParams = {...queryParams, page: this.page()}
     }
-    if (event.rows !== this._page()) {
-      this._limit.set(event.rows);
-      queryParams = {...queryParams, _limit: this._limit()}
+    if (event.rows !== this.limit()) {
+      this.limit.set(event.rows);
+      queryParams = {...queryParams, limit: this.limit()}
     }
     this._router.navigate([], {
       relativeTo: this._route,
@@ -111,7 +116,7 @@ export class ClientListComponent {
   }
 
   private getClients() {
-    this._clientsService.getClients({_page: this._page(), _limit: this._limit()})
+    this._clientsService.getClients({_page: this.page(), _limit: this.limit()})
       .pipe(takeUntilDestroyed(this._destroyRef))
       .subscribe((response: { data: IClient[], count: number }) => {
         this.clients.set(response.data);

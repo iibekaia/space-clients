@@ -24,7 +24,7 @@
       <ng-template #header>
         <tr>
           @for (col of columns(); track col.value) {
-            <!-- If there's only one client, sorting is unnecessary.-->
+            <!-- თუ მხოლოდ ერთი კლიენტი გაიჩითა, სორტირება არცაა საჭირო -->
             @if (clients().length > 1 && col.value !== '_actions') {
               <th pSortableColumn="{{col.value}}" style="width:20%"> {{ col.title }}
                 <p-sortIcon field="{{col.value}}"/>
@@ -40,7 +40,11 @@
           @for (col of columns(); track col.value) {
             <td [class.disabled]="!client.active">
               @if (col.value !== '_actions') {
-                {{ client[col.value] }}
+                @if (col.value == 'gender') {
+                  {{ GENDERS_MAP[client[col.value]] }}
+                } @else {
+                  {{ client[col.value] }}
+                }
               } @else {
                 @if (client.active) {
                   <div class="d-flex">
@@ -67,9 +71,10 @@
       </ng-template>
     </p-table>
     <p-paginator
-      [first]="_page()" [rows]="_limit()"
+      [first]="first()"
+      [rows]="limit()"
       [totalRecords]="total()"
-      [rowsPerPageOptions]="[2, 5, 10]"
+      [rowsPerPageOptions]="[1, 2, 5, 10, 25]"
       (onPageChange)="onPageChange($event)"
     />
   </p-card>
