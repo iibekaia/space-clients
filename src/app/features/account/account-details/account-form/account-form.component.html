@@ -11,12 +11,10 @@
       styleClass="mt-3 border overflow-none"
       #table
       [value]="formArray().controls"
-      [tableStyle]="{'min-width': '60rem'}"
     >
       <ng-template #header>
         <tr>
           <th>#</th>
-          <th style="width:20%">ანგარიშის ნომერი</th>
           <th style="width:20%">ანგარიშის ტიპი</th>
           <th>ვალუტა</th>
           <th style="width:20%">ანგარიშის სტატუსი</th>
@@ -25,7 +23,6 @@
       <ng-template #body let-row let-i="rowIndex">
         <tr [formGroup]="row">
           <td>{{ i + 1 }}</td>
-          <td><input id="number" pInputText formControlName="number"/></td>
           <td>
             <p-select
               id="type"

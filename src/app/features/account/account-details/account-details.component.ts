@@ -13,5 +13,5 @@ import {AccountFormComponent} from "./account-form/account-form.component";
 })
 export class AccountDetailsComponent {
     private _route = inject(ActivatedRoute);
-    public clients: WritableSignal<IClient[]> = signal(this._route.snapshot.data['clients']);
+    public clients: WritableSignal<IClient[]> = signal(this._route.snapshot.data['clients'].filter((client: IClient) => !client?.accountsId));
 }

@@ -35,7 +35,6 @@ export class ClientListComponent {
   public clients: WritableSignal<any[]> = signal([]);
   public total: WritableSignal<number> = signal(0);
   public columns: WritableSignal<{ value: string; title: string }[]> = signal([
-    {value: 'clientNumber', title: 'კლიენტის N'},
     {value: 'name', title: 'სახელი'},
     {value: 'lastName', title: 'გვარი'},
     {value: 'personalNumber', title: 'პ/ნ'},

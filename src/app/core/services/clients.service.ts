@@ -31,11 +31,15 @@ export class ClientsService {
     return this.http.get<IAccount[]>(`${this._config.API_URL}/accounts`, {params: {clientId}})
   }
 
+  addClientAccount(params: { clientId: number, accounts: IAccount[] }): Observable<IClient> {
+    return this.http.post<IClient>(`${this._config.API_URL}/accounts`, params)
+  }
+
   getClientById(id: string): Observable<any> {
     return this.http.get<IClient>(`${this._config.API_URL}/clients`, {params: {id}})
   }
 
-  deactivateClient(params: any): Observable<any> {
+  updateClientDetails(params: any): Observable<any> {
     return this.http.patch<IClient>(`${this._config.API_URL}/clients/${params.id}`, params)
   }
 

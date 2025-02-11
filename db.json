@@ -2,7 +2,6 @@
   "clients": [
     {
       "id": "1",
-      "clientNumber": 123213,
       "name": "imeda",
       "lastName": "bekaia",
       "gender": 1,
@@ -21,7 +20,6 @@
       "active": false
     },
     {
-      "clientNumber": 99787,
       "name": "nargizi",
       "lastName": "khaiiiiiiin",
       "gender": 1,
@@ -38,10 +36,10 @@
         "address": "aaaa"
       },
       "id": "2",
-      "active": true
+      "active": true,
+      "accountsId": 3
     },
     {
-      "clientNumber": "789456",
       "name": "ლუკა",
       "lastName": "შონია",
       "gender": 1,
@@ -61,7 +59,6 @@
       "active": true
     },
     {
-      "clientNumber": "123123",
       "name": "ზაზა",
       "lastName": "ზაზუნაია",
       "gender": 2,
@@ -81,7 +78,6 @@
       "active": true
     },
     {
-      "clientNumber": "123123",
       "name": "imeda",
       "lastName": "bekkaia",
       "gender": 1,
@@ -99,10 +95,36 @@
       },
       "active": true,
       "fileId": 1,
-      "id": "H7PAlYl"
+      "id": "H7PAlYl",
+      "accountsId": 2
     }
   ],
-  "accounts": [],
+  "accounts": [
+    {
+      "clientId": "H7PAlYl",
+      "accounts": [
+        {
+          "currencyId": 2,
+          "number": 112312312123,
+          "statusId": 1,
+          "typeId": 1
+        }
+      ],
+      "id": 2
+    },
+    {
+      "clientId": "2",
+      "accounts": [
+        {
+          "currencyId": 3,
+          "number": 0,
+          "statusId": 1,
+          "typeId": 1
+        }
+      ],
+      "id": 3
+    }
+  ],
   "images": [
     {
       "filename": "295_0.jpg",

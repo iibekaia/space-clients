@@ -27,13 +27,6 @@
   </div>
   <form [formGroup]="form()" (ngSubmit)="onSubmit()" class="flex justify-center row">
     <div class="d-flex flex-column p-field mb-2 col-md-6">
-      <label class="mb-1" for="clientNumber">კლიენტის ნომერი</label>
-      <input id="clientNumber" pInputText formControlName="clientNumber"/>
-      @if (form().get('clientNumber')?.invalid && form().get('clientNumber')?.touched) {
-        <small class="text-danger"> ველის შევსება სავალდებულოა </small>
-      }
-    </div>
-    <div class="d-flex flex-column p-field mb-2 col-md-6">
       <label class="mb-1" for="name">სახელი</label>
       <input id="name" pInputText formControlName="name"/>
       @if (form().get('name')?.invalid && form().get('name')?.touched) {
@@ -68,26 +61,6 @@
       }
     </div>
     <div class="d-flex flex-column p-field mb-2 col-md-6">
-      <label class="mb-1">სქესი</label>
-      <div class="d-flex">
-        @for (gender of genders(); track gender.name; let idx = $index) {
-          <div class="flex items-center mb-2 me-3">
-            <p-radiobutton
-              [inputId]="gender.value.toString()"
-              id="gender_{{gender.value}}"
-              name="gender"
-              [value]="gender.value"
-              formControlName="gender">
-            </p-radiobutton>
-            <label [for]="'gender_'+gender.value" class="ms-2">{{ gender.name }}</label>
-          </div>
-        }
-      </div>
-      @if (form().get('gender')?.invalid && form().get('gender')?.touched) {
-        <small class="text-danger"> ველის შევსება სავალდებულოა </small>
-      }
-    </div>
-    <div class="d-flex flex-column p-field mb-2 col-md-6">
       <label class="mb-1" for="personalNumber">პირადი ნომერი</label>
       <input id="personalNumber" pInputText formControlName="personalNumber"/>
       @if (form().get('personalNumber')?.invalid && form().get('personalNumber')?.touched) {
@@ -111,6 +84,26 @@
             უნდა იყოს 9 ციფრი და იწყებოდეს 5-იანით
           }
         </small>
+      }
+    </div>
+    <div class="d-flex flex-column p-field mb-2 col-md-6">
+      <label class="mb-1">სქესი</label>
+      <div class="d-flex">
+        @for (gender of genders(); track gender.name; let idx = $index) {
+          <div class="flex items-center mb-2 me-3">
+            <p-radiobutton
+              [inputId]="gender.value.toString()"
+              id="gender_{{gender.value}}"
+              name="gender"
+              [value]="gender.value"
+              formControlName="gender">
+            </p-radiobutton>
+            <label [for]="'gender_'+gender.value" class="ms-2">{{ gender.name }}</label>
+          </div>
+        }
+      </div>
+      @if (form().get('gender')?.invalid && form().get('gender')?.touched) {
+        <small class="text-danger"> ველის შევსება სავალდებულოა </small>
       }
     </div>
     <div class="d-flex flex-column p-field mb-2 col-md-12">
@@ -186,9 +179,7 @@
       კლიენტის ანგარიშ(ებ)ი
     </label>
     @if (accounts().length) {
-      <form>
-
-      </form>
+      <app-client-accounts-form [accounts]="accounts()"></app-client-accounts-form>
     } @else {
       <div class="alert alert-primary font-size-14" role="alert">
         ანგარიშ(ებ)ი ვერ მოიძებნა

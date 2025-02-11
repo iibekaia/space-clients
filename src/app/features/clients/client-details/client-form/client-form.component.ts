@@ -18,7 +18,7 @@ import {RadioButton} from 'primeng/radiobutton';
 import {Router} from '@angular/router';
 import {ClientsService} from '../../../../core/services/clients.service';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
-import {IAccount} from '../../../../core/models/accounts.model';
+import {ClientAccountsFormComponent} from '../client-accounts-form/client-accounts-form.component';
 
 @Component({
   selector: 'app-client-form',
@@ -28,7 +28,8 @@ import {IAccount} from '../../../../core/models/accounts.model';
     InputText,
     ReactiveFormsModule,
     RadioButton,
-    Button
+    Button,
+    ClientAccountsFormComponent
   ],
   templateUrl: './client-form.component.html',
   styleUrl: './client-form.component.scss'
@@ -42,7 +43,6 @@ export class ClientFormComponent {
   public data: InputSignal<any> = input();
   public accounts: WritableSignal<any> = signal([]);
   public form: WritableSignal<FormGroup> = signal(this._fb.group({
-    clientNumber: ['', Validators.pattern(/^\d+$/)],
     name: ['', [
       Validators.required,
       Validators.minLength(2),
@@ -112,7 +112,7 @@ export class ClientFormComponent {
   }
 
   onDeactivate() {
-    this._clientsService.deactivateClient({active: false, id: this.data().id})
+    this._clientsService.updateClientDetails({active: false, id: this.data().id})
       .pipe(takeUntilDestroyed(this._destroyRef))
       .subscribe(() => {
         this._notifier.saySuccess('დეაქტივირდა წარმატებით');
@@ -157,7 +157,6 @@ export class ClientFormComponent {
 
   private updateForm(data: IClient) {
     if (data) {
-      this.form().get('clientNumber').setValue(data.clientNumber);
       this.form().get('name').setValue(data.name);
       this.form().get('personalNumber').setValue(data.personalNumber);
       this.form().get('lastName').setValue(data.lastName);
@@ -174,8 +173,9 @@ export class ClientFormComponent {
   private getAccountByClientId() {
     this._clientsService.getAccountByClientId(this.data().id)
       .pipe(takeUntilDestroyed(this._destroyRef))
-      .subscribe((accounts: IAccount[]) => {
-        this.accounts.set(accounts);
+      .subscribe((data: any) => {
+        const clientAccounts = data[0].accounts;
+        this.accounts.set(clientAccounts);
       })
   }
 

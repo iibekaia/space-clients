@@ -1,0 +1,24 @@
+@if (accounts()) {
+  <p-table
+    styleClass="mt-3 border overflow-none"
+    #table
+    [value]="accounts()"
+  >
+    <ng-template #header>
+      <tr>
+        <th>#</th>
+        <th style="width:20%">ანგარიშის ტიპი</th>
+        <th>ვალუტა</th>
+        <th style="width:20%">ანგარიშის სტატუსი</th>
+      </tr>
+    </ng-template>
+    <ng-template #body let-account let-i="rowIndex">
+      <tr>
+        <td> {{ i + 1 }} </td>
+        <td> {{ account.typeId }}</td>
+        <td> {{ account.currencyId }}</td>
+        <td> {{ account.statusId }}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+}
