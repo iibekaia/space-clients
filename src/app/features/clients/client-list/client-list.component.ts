@@ -3,12 +3,13 @@ import {TableModule} from 'primeng/table';
 import {Button} from 'primeng/button';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ClientsService} from '../../../core/services/clients.service';
-import {IClient} from '../../../core/models/clients.model';
 import {Card} from 'primeng/card';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {Paginator} from 'primeng/paginator';
 import {NotificationService} from '../../../core/services/notification.service';
 import {GENDERS_MAP} from '../../../core/models/clients.model';
+import {Store} from '@ngrx/store';
+import {LOAD_CLIENTS} from '../../../state/client/client.actions';
 
 @Component({
   selector: 'app-client-list',
@@ -22,6 +23,7 @@ import {GENDERS_MAP} from '../../../core/models/clients.model';
   styleUrl: './client-list.component.scss'
 })
 export class ClientListComponent {
+  private _store = inject(Store);
   private _notifier = inject(NotificationService);
   private _route = inject(ActivatedRoute);
   private _router = inject(Router);
@@ -52,7 +54,8 @@ export class ClientListComponent {
   public GENDERS_MAP = GENDERS_MAP;
 
   constructor() {
-    this.getClients();
+    this.dispatchClients();
+    this.listenToClients();
   }
 
   onSort(event: { field: string, order: number }) {
@@ -83,7 +86,7 @@ export class ClientListComponent {
       .pipe(takeUntilDestroyed(this._destroyRef))
       .subscribe(() => {
         this._notifier.saySuccess('წაიშალა წარმატებით');
-        this.getClients();
+        this.dispatchClients();
       })
   }
 
@@ -108,19 +111,21 @@ export class ClientListComponent {
       queryParams: queryParams,
       queryParamsHandling: 'merge',
     });
-    this.getClients();
+    this.dispatchClients();
   }
 
   get generateSnapShot() {
     return this._route.snapshot.queryParams;
   }
 
-  private getClients() {
-    this._clientsService.getClients({_page: this.page(), _limit: this.limit()})
-      .pipe(takeUntilDestroyed(this._destroyRef))
-      .subscribe((response: { data: IClient[], count: number }) => {
-        this.clients.set(response.data);
-        this.total.set(response.count);
-      })
+  private listenToClients() {
+    this._store.select('clients').subscribe(response => {
+      this.clients.set(response.data);
+      this.total.set(response.count);
+    })
+  }
+
+  private dispatchClients() {
+    this._store.dispatch(LOAD_CLIENTS({page: this.page(), limit: this.limit()}));
   }
 }

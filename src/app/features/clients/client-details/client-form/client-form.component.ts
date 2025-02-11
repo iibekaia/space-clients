@@ -149,9 +149,10 @@ export class ClientFormComponent {
 
     let params: any = {
       ...formValue,
+      active: (this.data()?.active || false),
       id: this.data().id
     }
-    if (this.uploadedFile().id) {
+    if (this.uploadedFile()?.id) {
       params = {
         ...params,
         fileId: this.uploadedFile().id

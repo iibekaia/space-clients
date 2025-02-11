@@ -20,7 +20,7 @@ export class ClientAccountsFormComponent {
 
   constructor() {
     setTimeout(() => {
-      console.log(this.accounts())
+      // console.log(this.accounts())
     })
   }
 }

@@ -16,6 +16,10 @@ import {provideToastr, ToastrModule} from 'ngx-toastr';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {AppConfig} from './core/models/clients.model';
 import {clientInterceptorInterceptor} from './core/interceptors/client-interceptor.interceptor';
+import {provideStore} from '@ngrx/store';
+import {provideEffects} from '@ngrx/effects';
+import {clientReducer} from './state/client/client.reducer';
+import {ClientEffects} from './state/client/client.effects';
 
 export const CONFIG = new InjectionToken<AppConfig>('CONFIG');
 export const appConfig: ApplicationConfig = {
@@ -46,5 +50,7 @@ export const appConfig: ApplicationConfig = {
       provide: CONFIG,
       useValue: {API_URL}
     },
+    provideStore({clients: clientReducer}),
+    provideEffects(ClientEffects)
   ]
 };
