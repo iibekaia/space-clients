@@ -19,6 +19,7 @@ import {Router} from '@angular/router';
 import {ClientsService} from '../../../../core/services/clients.service';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {ClientAccountsFormComponent} from '../client-accounts-form/client-accounts-form.component';
+import {FloatLabel} from 'primeng/floatlabel';
 
 @Component({
   selector: 'app-client-form',
@@ -29,7 +30,8 @@ import {ClientAccountsFormComponent} from '../client-accounts-form/client-accoun
     ReactiveFormsModule,
     RadioButton,
     Button,
-    ClientAccountsFormComponent
+    ClientAccountsFormComponent,
+    FloatLabel
   ],
   templateUrl: './client-form.component.html',
   styleUrl: './client-form.component.scss'
@@ -174,7 +176,7 @@ export class ClientFormComponent {
     this._clientsService.getAccountByClientId(this.data().id)
       .pipe(takeUntilDestroyed(this._destroyRef))
       .subscribe((data: any) => {
-        const clientAccounts = data[0].accounts;
+        const clientAccounts = (data || [])[0]?.accounts;
         this.accounts.set(clientAccounts);
       })
   }

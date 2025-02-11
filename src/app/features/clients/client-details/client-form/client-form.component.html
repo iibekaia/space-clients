@@ -110,19 +110,28 @@
       <label class="mb-1" for="legalAddress">იურიდიული მისამართი</label>
       <div formGroupName="legalAddress" id="legalAddress" class="d-flex align-items-center">
         <div class="mt-1 w-100">
-          <input pInputText formControlName="country" class="w-100"/>
+          <p-floatlabel variant="on">
+            <input pInputText id="legalAddresscountry" formControlName="country" autocomplete="off"/>
+            <label for="legalAddresscountry">ქვეყანა</label>
+          </p-floatlabel>
           @if (form().get('legalAddress.country')?.invalid && form().get('legalAddress.country')?.touched) {
             <small class="text-danger"> ველის შევსება სავალდებულოა </small>
           }
         </div>
         <div class="px-2 mt-1 w-100">
-          <input pInputText formControlName="city" class="w-100"/>
+          <p-floatlabel variant="on">
+            <input pInputText id="legalAddresscity" formControlName="city" autocomplete="off"/>
+            <label for="legalAddresscity">ქალაქი</label>
+          </p-floatlabel>
           @if (form().get('legalAddress.city')?.invalid && form().get('legalAddress.city')?.touched) {
             <small class="text-danger"> ველის შევსება სავალდებულოა </small>
           }
         </div>
         <div class="mt-1 w-100">
-          <input pInputText formControlName="address" class="w-100"/>
+          <p-floatlabel variant="on">
+            <input pInputText id="legalAddressaddress" formControlName="address" autocomplete="off"/>
+            <label for="legalAddressaddress">მისამართი</label>
+          </p-floatlabel>
           @if (form().get('legalAddress.address')?.invalid && form().get('legalAddress.address')?.touched) {
             <small class="text-danger"> ველის შევსება სავალდებულოა </small>
           }
@@ -133,19 +142,29 @@
       <label class="mb-1" for="actualAddress">ფაქტობრივი მისამართი</label>
       <div formGroupName="actualAddress" id="actualAddress" class="d-flex align-items-center">
         <div class="mt-1 w-100">
-          <input pInputText formControlName="country" class="w-100"/>
+          <p-floatlabel variant="on">
+            <input pInputText id="actualAddresscountry" formControlName="country" autocomplete="off"/>
+            <label for="actualAddresscountry">ქვეყანა</label>
+          </p-floatlabel>
+
           @if (form().get('actualAddress.country')?.invalid && form().get('actualAddress.country')?.touched) {
             <small class="text-danger"> ველის შევსება სავალდებულოა </small>
           }
         </div>
         <div class="px-2 mt-1 w-100">
-          <input pInputText formControlName="city" class="w-100"/>
+          <p-floatlabel variant="on">
+            <input pInputText id="actualAddresscity" formControlName="city" autocomplete="off"/>
+            <label for="actualAddresscity">ქალაქი</label>
+          </p-floatlabel>
           @if (form().get('actualAddress.city')?.invalid && form().get('actualAddress.city')?.touched) {
             <small class="text-danger"> ველის შევსება სავალდებულოა </small>
           }
         </div>
         <div class="mt-1 w-100">
-          <input pInputText formControlName="address" class="w-100"/>
+          <p-floatlabel variant="on">
+            <input pInputText id="actualAddressaddress" formControlName="address" autocomplete="off"/>
+            <label for="actualAddressaddress">მისამართი</label>
+          </p-floatlabel>
           @if (form().get('actualAddress.address')?.invalid && form().get('actualAddress.address')?.touched) {
             <small class="text-danger"> ველის შევსება სავალდებულოა </small>
           }
@@ -178,7 +197,7 @@
     <label class="text-secondary font-size-20 d-flex align-items-center mb-3">
       კლიენტის ანგარიშ(ებ)ი
     </label>
-    @if (accounts().length) {
+    @if (accounts()?.length) {
       <app-client-accounts-form [accounts]="accounts()"></app-client-accounts-form>
     } @else {
       <div class="alert alert-primary font-size-14" role="alert">
