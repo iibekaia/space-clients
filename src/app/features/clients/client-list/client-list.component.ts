@@ -9,7 +9,7 @@ import {Paginator} from 'primeng/paginator';
 import {NotificationService} from '../../../core/services/notification.service';
 import {GENDERS_MAP} from '../../../core/models/clients.model';
 import {Store} from '@ngrx/store';
-import {LOAD_CLIENTS} from '../../../state/client/client.actions';
+import {DELETE_CLIENT, LOAD_CLIENTS} from '../../../state/client/client.actions';
 
 @Component({
   selector: 'app-client-list',
@@ -84,12 +84,7 @@ export class ClientListComponent {
   }
 
   onDelete(id: string) {
-    this._clientsService.deleteClient(id)
-      .pipe(takeUntilDestroyed(this._destroyRef))
-      .subscribe(() => {
-        this._notifier.saySuccess('წაიშალა წარმატებით');
-        this.dispatchClients();
-      })
+    this._store.dispatch(DELETE_CLIENT({id}));
   }
 
   onEdit(id: string) {

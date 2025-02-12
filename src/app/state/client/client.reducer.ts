@@ -16,5 +16,9 @@ export const clientReducer = createReducer(
       data: [...(state.data || []), payload.client],
       count: (state.count || 1) + 1,
     };
-  })
+  }),
+  on(ACTIONS.DELETE_CLIENT_SUCCESS, (state, payload) => {
+    console.log(state, payload)
+    return {...state, data: [...(state.data || []).filter((client: any) => client.id !== payload.id)]};
+  }),
 )

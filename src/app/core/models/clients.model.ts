@@ -1,3 +1,5 @@
+import {DELETE_CLIENT} from '../../state/client/client.actions';
+
 export interface IClient {
   id: any;
   accountsId?: any;
@@ -47,4 +49,7 @@ export enum EEffect {
   ADD_CLIENT_SUCCESS = 'ADD_CLIENT_SUCCESS',
   DEACTIVATE_CLIENT = 'DEACTIVATE_CLIENT',
   DEACTIVATE_CLIENT_SUCCESS = 'DEACTIVATE_CLIENT_SUCCESS',
+  DELETE_CLIENT = 'DELETE_CLIENT',
+  DELETE_CLIENT_SUCCESS = 'DELETE_CLIENT_SUCCESS',
+
 }

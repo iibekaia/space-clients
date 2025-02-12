@@ -6,7 +6,7 @@ import {
   ADD_CLIENT,
   ADD_CLIENT_SUCCESS,
   DEACTIVATE_CLIENT,
-  DEACTIVATE_CLIENT_SUCCESS,
+  DEACTIVATE_CLIENT_SUCCESS, DELETE_CLIENT, DELETE_CLIENT_SUCCESS,
   LOAD_CLIENTS,
   LOAD_CLIENTS_SUCCESS
 } from './client.actions';
@@ -60,6 +60,22 @@ export class ClientEffects {
             this._notifier.saySuccess('კლიენტი დეაქტივირდა წარმატებით');
             this._router.navigate(['/']);
             return DEACTIVATE_CLIENT_SUCCESS({client})
+          }),
+          catchError(() => EMPTY)
+        )
+    })), {functional: true}
+  )
+
+
+  DELETE_CLIENT$ = createEffect(() => this.actions$.pipe(
+    ofType(DELETE_CLIENT),
+    mergeMap((data) => {
+      const clientId = data.id
+      return this.clientsService.deleteClient(clientId)
+        .pipe(
+          map((client: any) => {
+            this._notifier.saySuccess('კლიენტი წაიშალა წარმატებით');
+            return DELETE_CLIENT_SUCCESS({id: clientId})
           }),
           catchError(() => EMPTY)
         )

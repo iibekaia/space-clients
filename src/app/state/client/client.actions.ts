@@ -23,3 +23,12 @@ export const DEACTIVATE_CLIENT_SUCCESS = createAction(
   EEffect.DEACTIVATE_CLIENT_SUCCESS,
   props<{ client: any }>()
 );
+
+export const DELETE_CLIENT = createAction(
+  EEffect.DELETE_CLIENT,
+  props<{ id: any }>() // payload
+);
+export const DELETE_CLIENT_SUCCESS = createAction(
+  EEffect.DELETE_CLIENT_SUCCESS,
+  props<{ id: any }>()
+);
