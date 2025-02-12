@@ -15,7 +15,7 @@ import {InputText} from 'primeng/inputtext';
 import {NotificationService} from '../../../../core/services/notification.service';
 import {EGender, Genders, IClient} from '../../../../core/models/clients.model';
 import {RadioButton} from 'primeng/radiobutton';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {ClientsService} from '../../../../core/services/clients.service';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {ClientAccountsFormComponent} from '../client-accounts-form/client-accounts-form.component';
@@ -45,8 +45,9 @@ export class ClientFormComponent {
   private _fb = inject(FormBuilder);
   private _notifier = inject(NotificationService);
   private _router = inject(Router);
+  private _route = inject(ActivatedRoute);
   public data: InputSignal<any> = input();
-  public accounts: WritableSignal<any> = signal([]);
+  public accounts: WritableSignal<any> = signal(this._route.snapshot.data['account']);
   public form: WritableSignal<FormGroup> = signal(this._fb.group({
     name: ['', [
       Validators.required,
@@ -164,18 +165,8 @@ export class ClientFormComponent {
       this.form().get('legalAddress').setValue(data.legalAddress);
       this.form().get('actualAddress').setValue(data.actualAddress);
 
-      this.getAccountByClientId();
       this.getImage();
     }
-  }
-
-  private getAccountByClientId() {
-    this._clientsService.getAccountByClientId(this.data().id)
-      .pipe(takeUntilDestroyed(this._destroyRef))
-      .subscribe((data: any) => {
-        const clientAccounts = (data || [])[0]?.accounts;
-        this.accounts.set(clientAccounts);
-      })
   }
 
   private getImage() {

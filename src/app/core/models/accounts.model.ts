@@ -1,7 +1,6 @@
 export interface IAccount {
   id?: any;
   clientId: string;
-  numberId?: string;
   type?: any;
   typeId?: string;
   currency?: any;

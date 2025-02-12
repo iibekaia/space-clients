@@ -1,4 +1,4 @@
-import {Component, DestroyRef, effect, inject, input, InputSignal, signal, WritableSignal} from '@angular/core';
+import {Component, effect, inject, input, InputSignal, signal, WritableSignal} from '@angular/core';
 import {Select} from 'primeng/select';
 import {FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {Card} from 'primeng/card';
@@ -7,9 +7,9 @@ import {TableModule} from 'primeng/table';
 import {Button} from 'primeng/button';
 import {ActivatedRoute, Router} from '@angular/router';
 import {NotificationService} from '../../../../core/services/notification.service';
-import {ClientsService} from "../../../../core/services/clients.service";
-import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 import {CURRENCIES, IAccount, STATUSES, TYPES} from "../../../../core/models/accounts.model";
+import {Store} from '@ngrx/store';
+import {ADD_CLIENT_ACCOUNT} from '../../../../state/account/account.actions';
 
 @Component({
   selector: 'app-account-form',
@@ -25,8 +25,7 @@ import {CURRENCIES, IAccount, STATUSES, TYPES} from "../../../../core/models/acc
   styleUrl: './account-form.component.scss'
 })
 export class AccountFormComponent {
-  private _clientsService = inject(ClientsService);
-  private _destroyRef = inject(DestroyRef);
+  private _store = inject(Store);
   private _notifier = inject(NotificationService);
   private _fb = inject(FormBuilder);
   private _router = inject(Router);
@@ -70,22 +69,8 @@ export class AccountFormComponent {
       statusId: account.status?.value,
       typeId: account.type?.value,
     }));
-
-    this._clientsService.addClientAccount({clientId: this.clientId() || this.selectedClient()?.id, accounts})
-      .pipe(takeUntilDestroyed(this._destroyRef))
-      .subscribe((data: any) => {
-        this.updateClientDetails(data.id);
-      })
-  }
-
-  private updateClientDetails(accountsId: any) {
-    this._clientsService.updateClientDetails({accountsId, id: this.clientId() || this.selectedClient().id})
-      .pipe(takeUntilDestroyed(this._destroyRef))
-      .subscribe(() => {
-        this._notifier.saySuccess('ანგარიში დაემატა წარმატებით');
-        this._router.navigate(['/'])
-        this.goToBack();
-      })
+    const params: any = {clientId: this.clientId() || this.selectedClient()?.id, accounts}
+    this._store.dispatch(ADD_CLIENT_ACCOUNT(params));
   }
 
   goToBack() {

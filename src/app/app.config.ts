@@ -20,6 +20,8 @@ import {provideStore} from '@ngrx/store';
 import {provideEffects} from '@ngrx/effects';
 import {clientReducer} from './state/client/client.reducer';
 import {ClientEffects} from './state/client/client.effects';
+import {accountReducer} from './state/account/account.reducer';
+import {AccountEffects} from './state/account/account.effects';
 
 export const CONFIG = new InjectionToken<AppConfig>('CONFIG');
 export const appConfig: ApplicationConfig = {
@@ -50,7 +52,7 @@ export const appConfig: ApplicationConfig = {
       provide: CONFIG,
       useValue: {API_URL}
     },
-    provideStore({clients: clientReducer}),
-    provideEffects(ClientEffects)
+    provideStore({clients: clientReducer, accounts: accountReducer}),
+    provideEffects(ClientEffects, AccountEffects)
   ]
 };
