@@ -17,8 +17,20 @@ export const clientReducer = createReducer(
       count: (state.count || 1) + 1,
     };
   }),
+  on(ACTIONS.UPDATE_CLIENT_SUCCESS, (state, payload) => {
+    const data = (state.data || []).map(client => {
+      if (client.id === payload.client.id) {
+        return payload.client
+      }
+      return client
+    });
+    return {
+      ...state,
+      data: [...data],
+      count: (state.count || 1) + 1,
+    };
+  }),
   on(ACTIONS.DELETE_CLIENT_SUCCESS, (state, payload) => {
-    console.log(state, payload)
     return {...state, data: [...(state.data || []).filter((client: any) => client.id !== payload.id)]};
   }),
 )

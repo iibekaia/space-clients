@@ -6,6 +6,16 @@ export const LOAD_CLIENTS_SUCCESS = createAction('' +
   EEffect.LOAD_CLIENTS_SUCCESS,
   props<{ data: any[], count: number }>()
 );
+
+export const UPDATE_CLIENT = createAction(
+  EEffect.UPDATE_CLIENT,
+  props<{ client: IClient }>() // payload
+);
+export const UPDATE_CLIENT_SUCCESS = createAction(
+  EEffect.UPDATE_CLIENT_SUCCESS,
+  props<{ client: any }>()
+);
+
 export const ADD_CLIENT = createAction(
   EEffect.ADD_CLIENT,
   props<{ client: IClient }>() // payload

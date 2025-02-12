@@ -174,7 +174,7 @@
 
     <div class="d-flex w-100 align-items-center mt-3">
       <div class="d-flex w-100 justify-content-start">
-        @if (data().id) {
+        @if (data()?.id) {
           <p-button type="button" label="ანგარიშის დახურვა" severity="danger" (onClick)="onDeactivate()"/>
         }
       </div>
@@ -187,12 +187,12 @@
           (onClick)="goToBack()"
           class="ms-3"
         />
-        <p-button type="submit" [label]="data().id ? 'რედაქტირება' : 'შენახვა'" severity="primary" class="ms-3"/>
+        <p-button type="submit" [label]="data()?.id ? 'რედაქტირება' : 'შენახვა'" severity="primary" class="ms-3"/>
       </div>
     </div>
   </form>
 </p-card>
-@if (data().id) {
+@if (data()?.id) {
   <p-card class="p-mb-3" styleClass="mt-3">
     <div class="d-flex align-items-center mb-3">
       <label class="text-secondary font-size-20 d-flex align-items-center">

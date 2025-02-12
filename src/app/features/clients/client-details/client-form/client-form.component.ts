@@ -20,7 +20,7 @@ import {ClientsService} from '../../../../core/services/clients.service';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {ClientAccountsFormComponent} from '../client-accounts-form/client-accounts-form.component';
 import {FloatLabel} from 'primeng/floatlabel';
-import {ADD_CLIENT, DEACTIVATE_CLIENT} from '../../../../state/client/client.actions';
+import {ADD_CLIENT, DEACTIVATE_CLIENT, UPDATE_CLIENT} from '../../../../state/client/client.actions';
 import {Store} from '@ngrx/store';
 
 @Component({
@@ -151,12 +151,7 @@ export class ClientFormComponent {
         fileId: this.uploadedFile()?.id
       }
     }
-    this._clientsService.updateClient(params)
-      .pipe(takeUntilDestroyed(this._destroyRef))
-      .subscribe(() => {
-        this._notifier.saySuccess('კლიენტის დეტალები განახლდა წარმატებით');
-        this.goToBack();
-      })
+    this._store.dispatch(UPDATE_CLIENT({client: params}));
   }
 
   private updateForm(data: IClient) {

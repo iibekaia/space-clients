@@ -8,7 +8,7 @@ import {
   DEACTIVATE_CLIENT,
   DEACTIVATE_CLIENT_SUCCESS, DELETE_CLIENT, DELETE_CLIENT_SUCCESS,
   LOAD_CLIENTS,
-  LOAD_CLIENTS_SUCCESS
+  LOAD_CLIENTS_SUCCESS, UPDATE_CLIENT, UPDATE_CLIENT_SUCCESS
 } from './client.actions';
 import {NotificationService} from '../../core/services/notification.service';
 import {Router} from '@angular/router';
@@ -73,7 +73,7 @@ export class ClientEffects {
       const clientId = data.id
       return this.clientsService.deleteClient(clientId)
         .pipe(
-          map((client: any) => {
+          map(() => {
             this._notifier.saySuccess('კლიენტი წაიშალა წარმატებით');
             return DELETE_CLIENT_SUCCESS({id: clientId})
           }),
@@ -82,4 +82,18 @@ export class ClientEffects {
     })), {functional: true}
   )
 
+  UPDATE_CLIENT$ = createEffect(() => this.actions$.pipe(
+    ofType(UPDATE_CLIENT),
+    mergeMap(({client}) => {
+      return this.clientsService.updateClient(client)
+        .pipe(
+          map((client: any) => {
+            this._notifier.saySuccess('კლიენტის დეტალები განახლდა წარმატებით');
+            this._router.navigate(['/']);
+            return UPDATE_CLIENT_SUCCESS({client})
+          }),
+          catchError(() => EMPTY)
+        )
+    })), {functional: true}
+  )
 }
