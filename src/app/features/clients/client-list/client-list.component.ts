@@ -6,7 +6,6 @@ import {ClientsService} from '../../../core/services/clients.service';
 import {Card} from 'primeng/card';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {Paginator} from 'primeng/paginator';
-import {NotificationService} from '../../../core/services/notification.service';
 import {GENDERS_MAP} from '../../../core/models/clients.model';
 import {Store} from '@ngrx/store';
 import {DELETE_CLIENT, LOAD_CLIENTS} from '../../../state/client/client.actions';
@@ -24,7 +23,6 @@ import {DELETE_CLIENT, LOAD_CLIENTS} from '../../../state/client/client.actions'
 })
 export class ClientListComponent {
   private _store = inject(Store);
-  private _notifier = inject(NotificationService);
   private _route = inject(ActivatedRoute);
   private _router = inject(Router);
   private _destroyRef = inject(DestroyRef);

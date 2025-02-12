@@ -1,4 +1,4 @@
-import {Component, computed, inject, Signal, signal, WritableSignal} from '@angular/core';
+import {Component, inject, signal, WritableSignal} from '@angular/core';
 import {ReactiveFormsModule} from '@angular/forms';
 import {ClientFormComponent} from './client-form/client-form.component';
 import {ActivatedRoute} from '@angular/router';
@@ -15,8 +15,5 @@ import {IClient} from '../../../core/models/clients.model';
 })
 export class ClientDetailsComponent {
   private _route = inject(ActivatedRoute);
-  public clients: WritableSignal<IClient[]> = signal(this._route.snapshot.data['clients']);
-  public client: Signal<any> = computed(() => {
-    return this.clients() !== undefined && this.clients()[0];
-  });
+  public client: WritableSignal<IClient> = signal(this._route.snapshot.data['client']);
 }
