@@ -46,7 +46,7 @@ export class AccountFormComponent {
     effect(() => {
       const clients = this.clients();
       setTimeout(() => {
-        this.clientsSignal.set(clients);
+        this.clientsSignal.set((clients || []).filter(x => x.active));
       })
     });
     effect(() => {
