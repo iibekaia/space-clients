@@ -4,6 +4,7 @@ import {ClientsService} from '../../services/clients.service';
 import {Store} from '@ngrx/store';
 import {catchError, map, of, switchMap, take} from 'rxjs';
 import {IAccount} from '../../models/accounts.model';
+import {LOAD_CLIENT_ACCOUNTS_SUCCESS} from '../../../state/account/account.actions';
 
 export const accountResolver: ResolveFn<boolean> = (route, state) => {
   const clientService = inject(ClientsService);
@@ -18,16 +19,21 @@ export const accountResolver: ResolveFn<boolean> = (route, state) => {
   return _store.select('accounts').pipe(
     take(1),
     map((accounts: IAccount[]) => {
-      return (accounts || []).length ? accounts : null
+      const fetchedAccountsData: any = (accounts || []).find((a: any) => a.clientId == id);
+      return fetchedAccountsData !== undefined ? fetchedAccountsData : null
     }),
-    switchMap((account: IAccount[] | null) => {
-      if (account) {
-        return of(account);
+    switchMap((data: any | null) => {
+      if (data) {
+        return of(data?.accounts);
       }
 
       return clientService.getAccountByClientId(id).pipe(
         map((fetchedAccounts: any) => {
-          return (fetchedAccounts || []).find((a: any) => a.clientId == id)?.accounts;
+          const fetchedAccountsData: any = fetchedAccounts.find((a: any) => a.clientId == id);
+          if (fetchedAccountsData !== undefined) {
+            _store.dispatch(LOAD_CLIENT_ACCOUNTS_SUCCESS({client: fetchedAccountsData}));
+          }
+          return fetchedAccountsData?.accounts;
         }),
         catchError(() => {
           router.navigate(['/not-define']);

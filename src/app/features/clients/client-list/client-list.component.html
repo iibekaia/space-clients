@@ -70,12 +70,19 @@
         </tr>
       </ng-template>
     </p-table>
-    <p-paginator
-      [first]="first()"
-      [rows]="limit()"
-      [totalRecords]="total()"
-      [rowsPerPageOptions]="[1, 2, 5, 10, 25]"
-      (onPageChange)="onPageChange($event)"
-    />
+    @if (!clients()?.length) {
+      <div class="alert alert-primary font-size-14 mt-3" role="alert">
+        კლიენტების სია ვერ მოიძებნა
+      </div>
+    } @else {
+      <p-paginator
+        [first]="first()"
+        [rows]="limit()"
+        [totalRecords]="total()"
+        [rowsPerPageOptions]="[1, 2, 5, 10, 25]"
+        (onPageChange)="onPageChange($event)"
+      />
+    }
+
   </p-card>
 </div>

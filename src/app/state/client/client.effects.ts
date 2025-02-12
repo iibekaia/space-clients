@@ -41,7 +41,7 @@ export class ClientEffects {
       return this.clientsService.addClient(client)
         .pipe(
           map((client: any) => {
-            this._notifier.saySuccess('დაემატა წარმატებით');
+            this._notifier.saySuccess('კლიენტი დაემატა წარმატებით');
             this._router.navigate(['/']);
             return ADD_CLIENT_SUCCESS({client})
           }),

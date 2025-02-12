@@ -47,7 +47,7 @@ export class ClientFormComponent {
   private _router = inject(Router);
   private _route = inject(ActivatedRoute);
   public data: InputSignal<any> = input();
-  public accounts: WritableSignal<any> = signal(this._route.snapshot.data['account']);
+  public accounts: WritableSignal<any> = signal(this._route.snapshot.data['accounts']);
   public form: WritableSignal<FormGroup> = signal(this._fb.group({
     name: ['', [
       Validators.required,
@@ -110,7 +110,7 @@ export class ClientFormComponent {
       this._notifier.sayError('ფორმა შევსებულია ხარვეზით');
       return;
     }
-    if (this.data().id) {
+    if (this.data()?.id) {
       this.updateClient();
     } else {
       this.addClient();

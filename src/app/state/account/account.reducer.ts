@@ -7,4 +7,7 @@ export const accountReducer = createReducer(
   on(ACTIONS.ADD_CLIENT_ACCOUNT_SUCCESS, (state, payload) => {
     return [...state, payload];
   }),
+  on(ACTIONS.LOAD_CLIENT_ACCOUNTS_SUCCESS, (state, payload) => {
+    return [...state, payload?.client];
+  }),
 )

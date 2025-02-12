@@ -13,7 +13,7 @@ export const routes: Routes = [
       },
       {
         path: 'edit/:id',
-        resolve: {client: clientResolverResolver, account: accountResolver},
+        resolve: {client: clientResolverResolver, accounts: accountResolver},
         loadComponent: () => import('./features/clients/client-details/client-details.component').then(m => m.ClientDetailsComponent),
       }
     ]

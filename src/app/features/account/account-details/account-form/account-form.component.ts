@@ -34,6 +34,7 @@ export class AccountFormComponent {
   public statuses: WritableSignal<any> = signal(STATUSES);
   public types: WritableSignal<any> = signal(TYPES);
   public clients: InputSignal<any> = input();
+  public clientsSignal: WritableSignal<any> = signal([]);
   public selectedClient: WritableSignal<IClient | undefined> = signal(undefined);
   public formArray: WritableSignal<FormArray> = signal(this._fb.array([]));
   public form: WritableSignal<FormGroup> = signal(this._fb.group({
@@ -43,15 +44,19 @@ export class AccountFormComponent {
 
   constructor() {
     effect(() => {
+      const clients = this.clients();
+      setTimeout(() => {
+        this.clientsSignal.set(clients);
+      })
+    });
+    effect(() => {
       if (this.selectedClient()) {
         this.resetFormArray();
       }
     });
     effect(() => {
       if (this.clientId()) {
-        setTimeout(() => {
-          this.selectedClient.set(this.clients().find((client: IClient) => client.id === this.clientId()));
-        })
+        this.selectedClient.set(this.clientsSignal().find((client: IClient) => client.id == this.clientId()));
       }
     });
   }
