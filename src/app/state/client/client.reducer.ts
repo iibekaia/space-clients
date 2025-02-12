@@ -17,6 +17,18 @@ export const clientReducer = createReducer(
       count: (state.count || 1) + 1,
     };
   }),
+  on(ACTIONS.DEACTIVATE_CLIENT_SUCCESS, (state, payload) => {
+    const data = (state.data || []).map(client => {
+      if (client.id === payload.client.id) {
+        return {...client, active: false}
+      }
+      return client
+    });
+    return {
+      ...state,
+      data: [...data],
+    };
+  }),
   on(ACTIONS.UPDATE_CLIENT_SUCCESS, (state, payload) => {
     const data = (state.data || []).map(client => {
       if (client.id === payload.client.id) {
