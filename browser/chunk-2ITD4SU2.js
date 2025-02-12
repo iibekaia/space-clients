@@ -1,0 +1,1 @@
+import{i as s}from"./chunk-YUIZQQQA.js";import{Ib as o,gb as n}from"./chunk-4YCFH6U6.js";var i=class t{static \u0275fac=function(e){return new(e||t)};static \u0275cmp=n({type:t,selectors:[["app-clients"]],decls:1,vars:0,template:function(e,c){e&1&&o(0,"router-outlet")},dependencies:[s],encapsulation:2})};export{i as ClientsComponent};
