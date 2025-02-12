@@ -14,3 +14,12 @@ export const ADD_CLIENT_SUCCESS = createAction(
   EEffect.ADD_CLIENT_SUCCESS,
   props<{ client: any }>()
 );
+
+export const DEACTIVATE_CLIENT = createAction(
+  EEffect.DEACTIVATE_CLIENT,
+  props<{ id: any }>() // payload
+);
+export const DEACTIVATE_CLIENT_SUCCESS = createAction(
+  EEffect.DEACTIVATE_CLIENT_SUCCESS,
+  props<{ client: any }>()
+);

@@ -2,7 +2,14 @@ import {inject, Injectable} from "@angular/core";
 import {Actions, createEffect, ofType} from "@ngrx/effects";
 import {catchError, EMPTY, map, mergeMap} from "rxjs";
 import {ClientsService} from '../../core/services/clients.service';
-import {ADD_CLIENT, ADD_CLIENT_SUCCESS, LOAD_CLIENTS, LOAD_CLIENTS_SUCCESS} from './client.actions';
+import {
+  ADD_CLIENT,
+  ADD_CLIENT_SUCCESS,
+  DEACTIVATE_CLIENT,
+  DEACTIVATE_CLIENT_SUCCESS,
+  LOAD_CLIENTS,
+  LOAD_CLIENTS_SUCCESS
+} from './client.actions';
 import {NotificationService} from '../../core/services/notification.service';
 import {Router} from '@angular/router';
 
@@ -33,7 +40,7 @@ export class ClientEffects {
     mergeMap(({client}) => {
       return this.clientsService.addClient(client)
         .pipe(
-          map(( client: any) =>{
+          map((client: any) => {
             this._notifier.saySuccess('დაემატა წარმატებით');
             this._router.navigate(['/']);
             return ADD_CLIENT_SUCCESS({client})
@@ -42,4 +49,21 @@ export class ClientEffects {
         )
     })), {functional: true}
   )
+
+  DEACTIVATE_CLIENT$ = createEffect(() => this.actions$.pipe(
+    ofType(DEACTIVATE_CLIENT),
+    mergeMap((data) => {
+      const clientId = data.id
+      return this.clientsService.updateClientDetails({active: false, id: clientId})
+        .pipe(
+          map((client: any) => {
+            this._notifier.saySuccess('კლიენტი დეაქტივირდა წარმატებით');
+            this._router.navigate(['/']);
+            return DEACTIVATE_CLIENT_SUCCESS({client})
+          }),
+          catchError(() => EMPTY)
+        )
+    })), {functional: true}
+  )
+
 }

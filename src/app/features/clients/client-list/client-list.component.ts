@@ -54,7 +54,7 @@ export class ClientListComponent {
   public GENDERS_MAP = GENDERS_MAP;
 
   constructor() {
-    if(this._clientsService.isFirstLoad()){
+    if (this._clientsService.isFirstLoad()) {
       this.dispatchClients();
     }
     this.listenToClients();
@@ -121,11 +121,13 @@ export class ClientListComponent {
   }
 
   private listenToClients() {
-    this._store.select('clients').subscribe(response => {
-      this._clientsService.isFirstLoad.set(false);
-      this.clients.set(response.data);
-      this.total.set(response.count);
-    })
+    this._store.select('clients')
+      .pipe(takeUntilDestroyed(this._destroyRef))
+      .subscribe(response => {
+        this._clientsService.isFirstLoad.set(false);
+        this.clients.set(response.data);
+        this.total.set(response.count);
+      })
   }
 
   private dispatchClients() {

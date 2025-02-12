@@ -20,7 +20,7 @@ import {ClientsService} from '../../../../core/services/clients.service';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {ClientAccountsFormComponent} from '../client-accounts-form/client-accounts-form.component';
 import {FloatLabel} from 'primeng/floatlabel';
-import {ADD_CLIENT} from '../../../../state/client/client.actions';
+import {ADD_CLIENT, DEACTIVATE_CLIENT} from '../../../../state/client/client.actions';
 import {Store} from '@ngrx/store';
 
 @Component({
@@ -117,12 +117,7 @@ export class ClientFormComponent {
   }
 
   onDeactivate() {
-    this._clientsService.updateClientDetails({active: false, id: this.data().id})
-      .pipe(takeUntilDestroyed(this._destroyRef))
-      .subscribe(() => {
-        this._notifier.saySuccess('კლიენტი დეაქტივირდა წარმატებით');
-        this.goToBack();
-      })
+    this._store.dispatch(DEACTIVATE_CLIENT({id: this.data().id}));
   }
 
   goToBack() {
