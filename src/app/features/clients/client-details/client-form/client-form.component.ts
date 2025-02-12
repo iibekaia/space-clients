@@ -15,11 +15,13 @@ import {InputText} from 'primeng/inputtext';
 import {NotificationService} from '../../../../core/services/notification.service';
 import {EGender, Genders, IClient} from '../../../../core/models/clients.model';
 import {RadioButton} from 'primeng/radiobutton';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {ClientsService} from '../../../../core/services/clients.service';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {ClientAccountsFormComponent} from '../client-accounts-form/client-accounts-form.component';
 import {FloatLabel} from 'primeng/floatlabel';
+import {ADD_CLIENT, DEACTIVATE_CLIENT, UPDATE_CLIENT} from '../../../../state/client/client.actions';
+import {Store} from '@ngrx/store';
 
 @Component({
   selector: 'app-client-form',
@@ -37,13 +39,15 @@ import {FloatLabel} from 'primeng/floatlabel';
   styleUrl: './client-form.component.scss'
 })
 export class ClientFormComponent {
+  private _store = inject(Store);
   private _destroyRef = inject(DestroyRef);
   private _clientsService = inject(ClientsService);
   private _fb = inject(FormBuilder);
   private _notifier = inject(NotificationService);
   private _router = inject(Router);
+  private _route = inject(ActivatedRoute);
   public data: InputSignal<any> = input();
-  public accounts: WritableSignal<any> = signal([]);
+  public accounts: WritableSignal<any> = signal(this._route.snapshot.data['accounts']);
   public form: WritableSignal<FormGroup> = signal(this._fb.group({
     name: ['', [
       Validators.required,
@@ -106,7 +110,7 @@ export class ClientFormComponent {
       this._notifier.sayError('ფორმა შევსებულია ხარვეზით');
       return;
     }
-    if (this.data().id) {
+    if (this.data()?.id) {
       this.updateClient();
     } else {
       this.addClient();
@@ -114,12 +118,7 @@ export class ClientFormComponent {
   }
 
   onDeactivate() {
-    this._clientsService.updateClientDetails({active: false, id: this.data().id})
-      .pipe(takeUntilDestroyed(this._destroyRef))
-      .subscribe(() => {
-        this._notifier.saySuccess('დეაქტივირდა წარმატებით');
-        this.goToBack();
-      })
+    this._store.dispatch(DEACTIVATE_CLIENT({id: this.data().id}));
   }
 
   goToBack() {
@@ -136,12 +135,7 @@ export class ClientFormComponent {
 
   private addClient() {
     const formValue = this.form().getRawValue();
-    this._clientsService.addClient({...formValue, active: true, fileId: this.uploadedFile().id})
-      .pipe(takeUntilDestroyed(this._destroyRef))
-      .subscribe(() => {
-        this._notifier.saySuccess('დაემატა წარმატებით');
-        this.goToBack();
-      })
+    this._store.dispatch(ADD_CLIENT({client: {...formValue, active: true, fileId: this.uploadedFile()?.id}}));
   }
 
   private updateClient() {
@@ -155,15 +149,10 @@ export class ClientFormComponent {
     if (this.uploadedFile()?.id) {
       params = {
         ...params,
-        fileId: this.uploadedFile().id
+        fileId: this.uploadedFile()?.id
       }
     }
-    this._clientsService.updateClient(params)
-      .pipe(takeUntilDestroyed(this._destroyRef))
-      .subscribe(() => {
-        this._notifier.saySuccess('განახლდა წარმატებით');
-        this.goToBack();
-      })
+    this._store.dispatch(UPDATE_CLIENT({client: params}));
   }
 
   private updateForm(data: IClient) {
@@ -176,18 +165,8 @@ export class ClientFormComponent {
       this.form().get('legalAddress').setValue(data.legalAddress);
       this.form().get('actualAddress').setValue(data.actualAddress);
 
-      this.getAccountByClientId();
       this.getImage();
     }
-  }
-
-  private getAccountByClientId() {
-    this._clientsService.getAccountByClientId(this.data().id)
-      .pipe(takeUntilDestroyed(this._destroyRef))
-      .subscribe((data: any) => {
-        const clientAccounts = (data || [])[0]?.accounts;
-        this.accounts.set(clientAccounts);
-      })
   }
 
   private getImage() {
@@ -216,11 +195,11 @@ export class ClientFormComponent {
         next: (file) => {
           this.uploadedFile.set(file)
           this.imgLoader.set(false);
-          this._notifier.saySuccess('ფოტო აიტვირთა წარმატებით');
+          this._notifier.saySuccess('კლიენტის ფოტო აიტვირთა წარმატებით');
         },
         error: () => {
           this.imgLoader.set(false);
-          this._notifier.sayError('ფოტო აიტვირთისას დაფიქსირდა შეცდომა');
+          this._notifier.sayError('კლიენტის ფოტოს ატვირთისას დაფიქსირდა შეცდომა');
         }
       });
     };

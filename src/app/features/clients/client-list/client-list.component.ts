@@ -6,10 +6,9 @@ import {ClientsService} from '../../../core/services/clients.service';
 import {Card} from 'primeng/card';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {Paginator} from 'primeng/paginator';
-import {NotificationService} from '../../../core/services/notification.service';
 import {GENDERS_MAP} from '../../../core/models/clients.model';
 import {Store} from '@ngrx/store';
-import {LOAD_CLIENTS} from '../../../state/client/client.actions';
+import {DELETE_CLIENT, LOAD_CLIENTS} from '../../../state/client/client.actions';
 
 @Component({
   selector: 'app-client-list',
@@ -24,7 +23,6 @@ import {LOAD_CLIENTS} from '../../../state/client/client.actions';
 })
 export class ClientListComponent {
   private _store = inject(Store);
-  private _notifier = inject(NotificationService);
   private _route = inject(ActivatedRoute);
   private _router = inject(Router);
   private _destroyRef = inject(DestroyRef);
@@ -54,7 +52,9 @@ export class ClientListComponent {
   public GENDERS_MAP = GENDERS_MAP;
 
   constructor() {
-    this.dispatchClients();
+    if (this._clientsService.isFirstLoad()) {
+      this.dispatchClients();
+    }
     this.listenToClients();
   }
 
@@ -82,12 +82,7 @@ export class ClientListComponent {
   }
 
   onDelete(id: string) {
-    this._clientsService.deleteClient(id)
-      .pipe(takeUntilDestroyed(this._destroyRef))
-      .subscribe(() => {
-        this._notifier.saySuccess('წაიშალა წარმატებით');
-        this.dispatchClients();
-      })
+    this._store.dispatch(DELETE_CLIENT({id}));
   }
 
   onEdit(id: string) {
@@ -119,10 +114,13 @@ export class ClientListComponent {
   }
 
   private listenToClients() {
-    this._store.select('clients').subscribe(response => {
-      this.clients.set(response.data);
-      this.total.set(response.count);
-    })
+    this._store.select('clients')
+      .pipe(takeUntilDestroyed(this._destroyRef))
+      .subscribe(response => {
+        this._clientsService.isFirstLoad.set(false);
+        this.clients.set(response.data);
+        this.total.set(response.count);
+      })
   }
 
   private dispatchClients() {

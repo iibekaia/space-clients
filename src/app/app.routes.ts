@@ -1,5 +1,6 @@
 import {Routes} from '@angular/router';
 import {clientResolverResolver} from './core/resolvers/client/client-resolver.resolver';
+import {accountResolver} from './core/resolvers/account/account.resolver';
 
 export const routes: Routes = [
   {path: '', redirectTo: 'dashboard', pathMatch: 'full'},
@@ -12,7 +13,7 @@ export const routes: Routes = [
       },
       {
         path: 'edit/:id',
-        resolve: {clients: clientResolverResolver},
+        resolve: {client: clientResolverResolver, accounts: accountResolver},
         loadComponent: () => import('./features/clients/client-details/client-details.component').then(m => m.ClientDetailsComponent),
       }
     ]

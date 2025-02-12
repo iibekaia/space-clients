@@ -1,4 +1,4 @@
-import {inject, Injectable} from '@angular/core';
+import {inject, Injectable, signal, WritableSignal} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {IClient} from '../models/clients.model';
 import {CONFIG} from '../../app.config';
@@ -11,6 +11,7 @@ import {IAccount} from '../models/accounts.model';
 export class ClientsService {
   private _config = inject(CONFIG);
   private http = inject(HttpClient);
+  public isFirstLoad: WritableSignal<boolean> = signal(true);
 
   constructor() {
     if (!this._config) {

@@ -2,10 +2,21 @@ import {inject, Injectable} from "@angular/core";
 import {Actions, createEffect, ofType} from "@ngrx/effects";
 import {catchError, EMPTY, map, mergeMap} from "rxjs";
 import {ClientsService} from '../../core/services/clients.service';
-import {LOAD_CLIENTS, LOAD_CLIENTS_SUCCESS} from './client.actions';
+import {
+  ADD_CLIENT,
+  ADD_CLIENT_SUCCESS,
+  DEACTIVATE_CLIENT,
+  DEACTIVATE_CLIENT_SUCCESS, DELETE_CLIENT, DELETE_CLIENT_SUCCESS,
+  LOAD_CLIENTS,
+  LOAD_CLIENTS_SUCCESS, UPDATE_CLIENT, UPDATE_CLIENT_SUCCESS
+} from './client.actions';
+import {NotificationService} from '../../core/services/notification.service';
+import {Router} from '@angular/router';
 
 @Injectable()
 export class ClientEffects {
+  private _router = inject(Router);
+  private _notifier = inject(NotificationService);
   private actions$ = inject(Actions);
   private clientsService = inject(ClientsService);
 
@@ -24,4 +35,65 @@ export class ClientEffects {
     })), {functional: true}
   )
 
+  ADD_CLIENT$ = createEffect(() => this.actions$.pipe(
+    ofType(ADD_CLIENT),
+    mergeMap(({client}) => {
+      return this.clientsService.addClient(client)
+        .pipe(
+          map((client: any) => {
+            this._notifier.saySuccess('კლიენტი დაემატა წარმატებით');
+            this._router.navigate(['/']);
+            return ADD_CLIENT_SUCCESS({client})
+          }),
+          catchError(() => EMPTY)
+        )
+    })), {functional: true}
+  )
+
+  DEACTIVATE_CLIENT$ = createEffect(() => this.actions$.pipe(
+    ofType(DEACTIVATE_CLIENT),
+    mergeMap((data) => {
+      const clientId = data.id
+      return this.clientsService.updateClientDetails({active: false, id: clientId})
+        .pipe(
+          map((client: any) => {
+            this._notifier.saySuccess('კლიენტი დეაქტივირდა წარმატებით');
+            this._router.navigate(['/']);
+            return DEACTIVATE_CLIENT_SUCCESS({client})
+          }),
+          catchError(() => EMPTY)
+        )
+    })), {functional: true}
+  )
+
+
+  DELETE_CLIENT$ = createEffect(() => this.actions$.pipe(
+    ofType(DELETE_CLIENT),
+    mergeMap((data) => {
+      const clientId = data.id
+      return this.clientsService.deleteClient(clientId)
+        .pipe(
+          map(() => {
+            this._notifier.saySuccess('კლიენტი წაიშალა წარმატებით');
+            return DELETE_CLIENT_SUCCESS({id: clientId})
+          }),
+          catchError(() => EMPTY)
+        )
+    })), {functional: true}
+  )
+
+  UPDATE_CLIENT$ = createEffect(() => this.actions$.pipe(
+    ofType(UPDATE_CLIENT),
+    mergeMap(({client}) => {
+      return this.clientsService.updateClient(client)
+        .pipe(
+          map((client: any) => {
+            this._notifier.saySuccess('კლიენტის დეტალები განახლდა წარმატებით');
+            this._router.navigate(['/']);
+            return UPDATE_CLIENT_SUCCESS({client})
+          }),
+          catchError(() => EMPTY)
+        )
+    })), {functional: true}
+  )
 }

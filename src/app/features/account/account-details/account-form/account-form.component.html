@@ -1,7 +1,7 @@
 <p-card class="p-mb-3">
   <p-select
     [disabled]="clientId()"
-    [options]="clients()"
+    [options]="clientsSignal()"
     [(ngModel)]="selectedClient"
     optionLabel="fullName"
     placeholder="აირჩიე კლიენტი"
